@@ -6,12 +6,12 @@ class Links extends React.Component {
   render() {
     const author = this.props.data
     const links = {
-      email: author.email,
-      github: author.github,
       telegram: author.telegram,
       twitter: author.twitter,
-      rss: author.rss,
+      github: author.github,
       vk: author.vk,
+      rss: author.rss,
+      email: author.email,
     }
 
     return (

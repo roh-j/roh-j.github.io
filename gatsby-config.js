@@ -9,7 +9,7 @@ module.exports = {
     siteUrl: url,
     title: 'Roh-j\'s Blog',
     subtitle:
-      '',
+      '노재희의 블로그입니다.',
     copyright: '© Roh-j All rights reserved.',
     disqusShortname: '',
     menu: [
@@ -25,17 +25,13 @@ module.exports = {
         label: 'About me',
         path: '/about/',
       },
-      {
-        label: 'Contact me',
-        path: '/contact/',
-      },
     ],
     author: {
       name: 'Roh Jaehee',
       email: 'roh-j@naver.com',
-      github: 'roh-j',
       telegram: '',
       twitter: '',
+      github: 'roh-j',
       rss: '',
       vk: '',
     },
