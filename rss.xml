@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Roh-j's Blog]]></title><description><![CDATA[Roh-j's Blog]]></description><link>http://github.com/dylang/node-rss</link><generator>GatsbyJS</generator><lastBuildDate>Sat, 22 Aug 2020 12:33:50 GMT</lastBuildDate><item><title><![CDATA[Upgraded to Gatsby v2]]></title><description><![CDATA[This starter has been forked and upgraded to Gatsby v2]]></description><link>https://roh-j.github.io/posts/upgraded-to-gatsby-v2/</link><guid isPermaLink="false">https://roh-j.github.io/posts/upgraded-to-gatsby-v2/</guid><pubDate>Thu, 18 Oct 2018 16:51:00 GMT</pubDate><content:encoded>&lt;p&gt;This is a Gatsby v2 compatible version of the
+&lt;a href=&quot;https://github.com/alxshelepenok/gatsby-starter-lumen&quot;&gt;lumen&lt;/a&gt; starter, started
+by the folks at &lt;a href=&quot;https://www.gatsbycentral.com/&quot;&gt;Gatsby Central&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Here’s a little recommended reading for Gatsby v2.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;First, &lt;a href=&quot;https://www.gatsbycentral.com/whats-new-in-gatsby-v2&quot;&gt;what’s new in v2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Next, &lt;a href=&quot;https://www.gatsbycentral.com/when-should-i-upgrade-to-gatsby-v2&quot;&gt;when should I upgrade?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.gatsbyjs.org/blog/2018-09-17-gatsby-v2/&quot;&gt;The Gatsby v2 announcement blog post&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;If you &lt;strong&gt;do decide to upgrade&lt;/strong&gt;, these articles will help you do that.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.gatsbycentral.com/getting-started-with-gatsby-v2&quot;&gt;Getting started with Gatsby v2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.gatsbycentral.com/should-i-rebuild-my-site-for-gatsby-v2&quot;&gt;Should I rebuild my site for Gatsby v2?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.gatsbycentral.com/how-do-layouts-work-in-gatsby-v2&quot;&gt;How do layouts work in Gatsby v2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.gatsbycentral.com/staticquery-in-gatsby-v2&quot;&gt;StaticQuery in Gatsby v2&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Finally, here’s a cheat sheet we prepared to help during the upgrade:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.gatsbycentral.com/gatsby-v2-refactoring-cheat-sheet&quot;&gt;Gatsby v2 refactoring cheat sheet&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content:encoded></item></channel></rss>
