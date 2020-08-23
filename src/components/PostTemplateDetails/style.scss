@@ -63,6 +63,13 @@
             }
         }
     }
+    &__author {
+        &-subtitle {
+            color: $color-gray;
+            @include line-height(1);
+            @include margin-bottom(1);
+        }
+    }
     &__date {
         max-width: $layout-post-single-width;
         margin-left: auto;

@@ -63,7 +63,7 @@ class PostTemplateDetails extends React.Component {
             {tagsBlock}
             <hr />
             <p className="post-single__footer-text">
-              {subtitle}
+              <span className="post-single__author-subtitle">{subtitle}</span>
               <a
                 href={`https://github.com/${author.github}`}
                 target="_blank"
