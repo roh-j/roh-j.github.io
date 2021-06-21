@@ -9,7 +9,7 @@ module.exports = {
     siteUrl: url,
     title: "Roh-j's Blog",
     subtitle: '안녕하세요! 노재희입니다.',
-    copyright: '© Roh-j All rights reserved.',
+    copyright: '© roh-j. All rights reserved.',
     disqusShortname: '',
     menu: [
       {
@@ -60,7 +60,7 @@ module.exports = {
         feeds: [
           {
             serialize: ({ query: { site, allMarkdownRemark } }) =>
-              allMarkdownRemark.edges.map((edge) =>
+              allMarkdownRemark.edges.map(edge =>
                 Object.assign({}, edge.node.frontmatter, {
                   description: edge.node.frontmatter.description,
                   date: edge.node.frontmatter.date,
