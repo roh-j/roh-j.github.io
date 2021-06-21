@@ -13048,6 +13048,7 @@ workbox-build@^3.4.1:
     workbox-cache-expiration "^3.6.2"
     workbox-cacheable-response "^3.6.2"
     workbox-core "^3.6.2"
+    workbox-google-analytics "^3.6.2"
     workbox-navigation-preload "^3.6.2"
     workbox-precaching "^3.6.2"
     workbox-range-requests "^3.6.2"
@@ -13074,6 +13075,16 @@ workbox-core@^3.6.2:
   version "3.6.2"
   resolved "https://registry.yarnpkg.com/workbox-core/-/workbox-core-3.6.2.tgz#4c79a15685970efc2e86dc31bf25900dd405a3e5"
   integrity sha512-5T5WBFy5nMm7zx+P2RwdzEVu5CK++bqwiEsGF+INwUxsOKpH9oXUlUdJE/KfUaMsKcZtHXEb74mMB6vvE88a/w==
+
+workbox-google-analytics@^3.6.2:
+  version "3.6.2"
+  resolved "https://registry.yarnpkg.com/workbox-google-analytics/-/workbox-google-analytics-3.6.2.tgz#e6fcbf6c77b215a556c4e342aa20c378205a9f63"
+  integrity sha512-NXBbo9xyHQvkHcvYoZkNJw7DB53dJUnmusKdSPg138A6HGt2ilycwTUuXNDWpkXXp3YHxcslrBMdptolwbzidg==
+  dependencies:
+    workbox-background-sync "^3.6.2"
+    workbox-core "^3.6.2"
+    workbox-routing "^3.6.2"
+    workbox-strategies "^3.6.2"
 
 workbox-navigation-preload@^3.6.2:
   version "3.6.2"
