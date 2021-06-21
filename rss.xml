@@ -1,4 +1,691 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Roh-j's Blog]]></title><description><![CDATA[노재희의 블로그입니다.]]></description><link>http://github.com/dylang/node-rss</link><generator>GatsbyJS</generator><lastBuildDate>Sun, 23 Aug 2020 08:49:58 GMT</lastBuildDate><item><title><![CDATA[Upgraded to Gatsby v2]]></title><description><![CDATA[This starter has been forked and upgraded to Gatsby v2]]></description><link>https://roh-j.github.io/posts/upgraded-to-gatsby-v2/</link><guid isPermaLink="false">https://roh-j.github.io/posts/upgraded-to-gatsby-v2/</guid><pubDate>Thu, 18 Oct 2018 16:51:00 GMT</pubDate><content:encoded>&lt;p&gt;This is a Gatsby v2 compatible version of the
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Roh-j's Blog]]></title><description><![CDATA[안녕하세요! 노재희입니다.]]></description><link>http://github.com/dylang/node-rss</link><generator>GatsbyJS</generator><lastBuildDate>Mon, 21 Jun 2021 10:39:28 GMT</lastBuildDate><item><title><![CDATA[OpenStack Horizon은 어떻게 사용자를 인증할까?]]></title><description><![CDATA[OpenStack Horizon은 어떻게 사용자를 인증, 인가하고 Keystone과 연동할까요? 이에 대한 과정을 시퀀스 다이어그램과 코드를 통해 알아봅시다.]]></description><link>https://roh-j.github.io/posts/how-does-openstack-horizon-authenticate-users/</link><guid isPermaLink="false">https://roh-j.github.io/posts/how-does-openstack-horizon-authenticate-users/</guid><pubDate>Thu, 18 Feb 2021 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Horizon은 클라우드 관리자와 사용자들이 다양한 OpenStack 자원과 서비스를 관리할 수 있는 웹 인터페이스입니다. OpenStack Horizon은 어떻게 사용자를 인증, 인가하고 Keystone과 연동할까요? 이에 대한 과정을 시퀀스 다이어그램과 코드를 통해 알아봅시다.&lt;/p&gt;
+&lt;h1&gt;OpenStack Horizon 인증 과정 요약&lt;/h1&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;th&gt;과정&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;Horizon은 Django의 인증 로직을 커스터마이징하여 Keystone과 연동한다.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;Keystone에서는 크게 2가지 유형의 토큰을 발급한다. (Unscoped 토큰, Scoped 토큰)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;Unscoped 토큰은 Keystone이 인증된 사용자에 대해 발급하는 신분 증명용 토큰으로 Scoped 토큰을 발급받기 위해 사용된다.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;Scoped 토큰을 발급받는 이유는 Unscoped 토큰만으로는 서비스(e.g. Nova)에 요청할 수 없기 때문이다.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;5&lt;/td&gt;
+&lt;td&gt;Scoped 토큰은 클라이언트(e.g. 유저, Nova, Glance)가 실행할 수 있는 범위가 담겨있는 토큰으로 서비스(e.g. Nova)에 요청할 수 있다.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;6&lt;/td&gt;
+&lt;td&gt;결국, Keystone 연동에서의 핵심은 Scoped 토큰을 발급받는 것이다.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;7&lt;/td&gt;
+&lt;td&gt;사용자가 인증되면 Horizon은 Unscoped 토큰을 세션에 저장한다. (추후 Scoped 토큰을 발급 받기 위해)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;8&lt;/td&gt;
+&lt;td&gt;세션에 저장된 Unscoped 토큰을 이용해 Scoped 토큰을 발급 받는다.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;9&lt;/td&gt;
+&lt;td&gt;발급 받은 Scoped 토큰과 함께 서비스(e.g. Nova)에 요청한다.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h1&gt;사용자 로그인 (시퀀스 다이어그램)&lt;/h1&gt;
+&lt;p&gt;Horizon은 Django 인증 시스템을 통해 사용자를 인증합니다. 인증 과정 중 Keystone과 연동하기 위해 Custom 인증이 추가되어 있는데, 이를 &lt;code class=&quot;language-text&quot;&gt;settings.py&lt;/code&gt;의 &lt;code class=&quot;language-text&quot;&gt;AUTHENTICATION_BACKENDS&lt;/code&gt; 옵션을 통해 확인할 수 있습니다. Custom 인증의 핵심은 Keystone에서 Unscoped 토큰을 발급받는 것으로, &lt;code class=&quot;language-text&quot;&gt;openstack_auth.backend.KeystoneBackend&lt;/code&gt; 모듈에서 진행합니다. Unscoped 토큰이 성공적으로 발급되면 해당 토큰을 Django Session에 저장합니다.&lt;/p&gt;
+&lt;p&gt;아래는 이러한 사용자 로그인 과정을 시퀀스 다이어그램으로 표현하였습니다.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/77b08a28279cc5abfd2267eaebd29980/e088a/6d35a982-879c-41fa-9fde-b2ec15add6b6.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 960px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 84.16666666666667%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAARCAIAAABSJhvpAAAACXBIWXMAAAsSAAALEgHS3X78AAABvUlEQVQ4y41T2XLbMAz0//9MM+20D/mGTB96TFonamM7tURSIinetwpaiWI7bRKMH+QVdgEsoNV0iBDCfr/fbrdSynIIAL33bdtWUMjpMQCEHCGEtXa1QLvdtmkazsclDxSB2dze0oHC31kRQELI7v5eKf1AzjmHGEBiHEdKCMWYYdwjbK0LMZepLIqQGQ+RUlqdoV3brtfrzd2dszaEaLRwkvQdQm079H2K8aFSCPBwQoYxvK/14R0IQTm0+SLWH1BHOam9GKlqZilQ94QMI816x1H8GNnPkKYeY4RQTwh0pMGwkXvnXiFPyeLdtbFeMCpo/SnOJeOUDEaKF8gHkxziP973mHM6DJTCXBXTLMr9y23PZMzXH6WOSgqllHMWZu2aK/fr05vI5NuFqXABJ2nXETII+ieL328wLOowbmKeUgzW6HpZQhjrADklw56Df3IqJRdKUh27ubRxMiNnPQEm59wak+ZVGa0BYqMKskNfL7SrErBkWAceuMQ37Pqdz49THJ1TJcNJgJKBc9K96z7n2n9evo3iWB6+z40t4BP5aOYpxHI2MzBCTOfgv8j5uWFL3qvk8jzvf+Bs2F94UN2JQ6jJogAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;6d35a982 879c 41fa 9fde b2ec15add6b6&quot;
+        title=&quot;&quot;
+        src=&quot;/static/77b08a28279cc5abfd2267eaebd29980/d9199/6d35a982-879c-41fa-9fde-b2ec15add6b6.png&quot;
+        srcset=&quot;/static/77b08a28279cc5abfd2267eaebd29980/8ff5a/6d35a982-879c-41fa-9fde-b2ec15add6b6.png 240w,
+/static/77b08a28279cc5abfd2267eaebd29980/e85cb/6d35a982-879c-41fa-9fde-b2ec15add6b6.png 480w,
+/static/77b08a28279cc5abfd2267eaebd29980/d9199/6d35a982-879c-41fa-9fde-b2ec15add6b6.png 960w,
+/static/77b08a28279cc5abfd2267eaebd29980/e088a/6d35a982-879c-41fa-9fde-b2ec15add6b6.png 1015w&quot;
+        sizes=&quot;(max-width: 960px) 100vw, 960px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;[그림 1] 사용자 로그인 시퀀스 다이어그램&lt;/p&gt;
+&lt;h1&gt;코드로 알아보자&lt;/h1&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/92985dd739a3ee975343903c785da0a1/bd48c/bc4f932b-5177-4cfe-9aaa-85ee5570807d.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 488px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 126.25%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAZCAYAAAAxFw7TAAAACXBIWXMAAAsSAAALEgHS3X78AAACk0lEQVQ4y6VVS2/TQBDOH+YCXDhxQ+IECFQJIbWiUEoEgkqUUyUkEIJCW9EHlObhJm2SOvEjcV5+7a4/Zl3beJu0JWWkT+Od2RnP7ny7WxBC4DLw3gDcciBCBhFdMI9zFORHFEWYELJLYRu/MLx2F6Ob9+Atriq+yRChJpQ6haC/SQk+bsFfWwerteA+ew85MyJfGqfETEt4VqLtMvwb9+HdegReXJv052KVhKnD9z0YnTZM00DXtmOt149gHjegVSvo9bqwLRM/d7fhua6yMiWhSPalUjrA/OM5FJcW8WTuIV4tL6G4/Byr71aw8roYj5eezuPF4gL2dn6cnzCVwPdRr2molA9gGh2qtoO+46Ctn6DT1tFqNgkNWFS5tPNkr5WEQvCs7VcRpUJpcJweyuUyNE3DeDzOKHC2izESzuX3fSptGGNKhekfZ0FMbBk8Go2g6zrtkeyuCZ30OOmgmFblFGQVyoFshKSCpIttWZlmYUhL5DHJJSL+9zs/lnPCIDitUCb0GYfRpyptB4YzRIfObsvqwRq6GAQMfS9E3yfth+eAwaa5IW0bLTmC7YbYbPWx2XQUfDvqEmx8qVkxvh938TXRG40eoYt18kvsm2MEXHaZKux6DJ80Ax9KJzHk5L3OCLvtYYYdfUC2oWLL+35bbrxSSijgMgHDZbAosSn1NFzkS8B4wsNB34HeaqJ2qGE0HCS8EVMQ5XSUG5/asi5LDobU0ZAu0JSPsyKNK6SETA2zkjlP6ozY8uhp1Srq9Tpc14uJOmty5XKQwfkDPivk6my6O3O3jbjycnkS69FpUxJG/3hmz74hyjX2Pwl5kmzhcwPXX+7j9tsSHT//gmf0EhFJzJutNu6sVvFgrQ5nHOAPP4CMCwgRogYAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;bc4f932b 5177 4cfe 9aaa 85ee5570807d&quot;
+        title=&quot;&quot;
+        src=&quot;/static/92985dd739a3ee975343903c785da0a1/bd48c/bc4f932b-5177-4cfe-9aaa-85ee5570807d.png&quot;
+        srcset=&quot;/static/92985dd739a3ee975343903c785da0a1/8ff5a/bc4f932b-5177-4cfe-9aaa-85ee5570807d.png 240w,
+/static/92985dd739a3ee975343903c785da0a1/e85cb/bc4f932b-5177-4cfe-9aaa-85ee5570807d.png 480w,
+/static/92985dd739a3ee975343903c785da0a1/bd48c/bc4f932b-5177-4cfe-9aaa-85ee5570807d.png 488w&quot;
+        sizes=&quot;(max-width: 488px) 100vw, 488px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;Horizon 콘솔에서 User Name과 Password를 입력하고 [Sign In] 버튼을 누르면&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/afde310e4e8f8b0198c56de597fad374/7c1cd/3dd68033-693a-41d9-bb67-f028172813a8.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 582px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 30.41666666666667%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAGCAIAAABM9SnKAAAACXBIWXMAAAsSAAALEgHS3X78AAAAoklEQVQY05WP6wqDMAyF+/7PqGBbHCu9xzZN69RVEcZ++nE4JASSE+a955xrYyCCUgoAEIvW2jmvtckp19aIut1QrfXy1lZWiaSQwzAaY5xzCdGHGCKkjBmxF9b5rghLhL4fnA8hxm6wJIaIfOJcCGvd8RBWSpkm/lZKG1sKretnvznH+x/HpV/LiEgIOc+vMw5Af+XRZRzHUUqprd22/VHsL0QmW9d2D6RZAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;3dd68033 693a 41d9 bb67 f028172813a8&quot;
+        title=&quot;&quot;
+        src=&quot;/static/afde310e4e8f8b0198c56de597fad374/7c1cd/3dd68033-693a-41d9-bb67-f028172813a8.png&quot;
+        srcset=&quot;/static/afde310e4e8f8b0198c56de597fad374/8ff5a/3dd68033-693a-41d9-bb67-f028172813a8.png 240w,
+/static/afde310e4e8f8b0198c56de597fad374/e85cb/3dd68033-693a-41d9-bb67-f028172813a8.png 480w,
+/static/afde310e4e8f8b0198c56de597fad374/7c1cd/3dd68033-693a-41d9-bb67-f028172813a8.png 582w&quot;
+        sizes=&quot;(max-width: 582px) 100vw, 582px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;POST Method로 파라미터와 함께 &lt;a href=&quot;http://localhost/auth/login&quot;&gt;http://localhost/auth/login&lt;/a&gt; URL을 요청합니다.&lt;/p&gt;
+&lt;h2&gt;Horizon (Back-end)&lt;/h2&gt;
+&lt;h4&gt;horizon/openstack_auth/urls.py&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;urlpatterns &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;
+  url&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;r&quot;^login/$&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; views&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;login&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; name&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;login&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+
+  &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;horizon/openstack_dashboard/settings.py&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;AUTHENTICATION_BACKENDS &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;openstack_auth.backend.KeystoneBackend&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;AUTHENTICATION_BACKENDS&lt;/code&gt; 옵션을 통해 Django 인증 시스템을 이용해 인증 시, 추가적인 인증 로직을 실행할 수 있습니다. 이러한 추가적인 인증을 Custom 인증이라 부릅니다.&lt;/p&gt;
+&lt;h4&gt;horizon/openstack_auth/views.py&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; django&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;contrib&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;auth &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; views &lt;span class=&quot;token keyword&quot;&gt;as&lt;/span&gt; django_auth_views
+
+&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;
+
+&lt;span class=&quot;token decorator annotation punctuation&quot;&gt;@sensitive_post_parameters&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token decorator annotation punctuation&quot;&gt;@csrf_protect&lt;/span&gt;
+&lt;span class=&quot;token decorator annotation punctuation&quot;&gt;@never_cache&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;login&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;request&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+
+  &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    res &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; django_auth_views&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;LoginView&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;as_view&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+      template_name&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;template_name&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+      redirect_field_name&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;auth&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;REDIRECT_FIELD_NAME&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+      form_class&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;form&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+      extra_context&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;extra_context&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+      redirect_authenticated_user&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token boolean&quot;&gt;False&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;request&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;except&lt;/span&gt; exceptions&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;KeystonePassExpiredException &lt;span class=&quot;token keyword&quot;&gt;as&lt;/span&gt; exc&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    res &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; django_http&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;HttpResponseRedirect&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+      reverse&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;password&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; args&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;exc&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;user_id&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    msg &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; _&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Your password has expired. Please set a new password.&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    res&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;set_cookie&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;logout_reason&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; msg&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; max_age&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;django_auth_views.LoginView.as_view()&lt;/code&gt; 를 호출하면 Django 인증 시스템이 실행됩니다. 그 후 &lt;code class=&quot;language-text&quot;&gt;AUTHENTICATION_BACKENDS&lt;/code&gt; 옵션에 따라 Custom 인증인 &lt;code class=&quot;language-text&quot;&gt;openstack_auth.backend.KeystoneBackend&lt;/code&gt; 모듈을 호출합니다. &lt;code class=&quot;language-text&quot;&gt;openstack_auth.backend.KeystoneBackend&lt;/code&gt; 모듈의 핵심은 Unscoped 토큰을 Keystone에게서 발급 받는 것으로, 모듈이 호출되면 Unscoped 토큰 발급 요청을 진행합니다.&lt;/p&gt;
+&lt;h4&gt;horizon/openstack_auth/backend.py&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# TODO(stephenfin): Subclass &apos;django.contrib.auth.backends.BaseBackend&apos; once we&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# (only) support Django 3.0&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;KeystoneBackend&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token builtin&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;token triple-quoted-string string&quot;&gt;&quot;&quot;&quot;Django authentication backend for use with ``django.contrib.auth``.&quot;&quot;&quot;&lt;/span&gt;
+
+  &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;authenticate&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;self&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; request&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; auth_url&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token boolean&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;**&lt;/span&gt;kwargs&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;token triple-quoted-string string&quot;&gt;&quot;&quot;&quot;Authenticates a user via the Keystone Identity API.&quot;&quot;&quot;&lt;/span&gt;
+    LOG&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;debug&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;Beginning user authentication&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;not&lt;/span&gt; auth_url&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+      auth_url &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; settings&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;OPENSTACK_KEYSTONE_URL
+
+    auth_url&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; url_fixed &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; utils&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;fix_auth_url_version_prefix&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;auth_url&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; url_fixed&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+      LOG&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;warning&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;The OPENSTACK_KEYSTONE_URL setting points to a v2.0 &quot;&lt;/span&gt;
+                  &lt;span class=&quot;token string&quot;&gt;&quot;Keystone endpoint, but v3 is specified as the API &quot;&lt;/span&gt;
+                  &lt;span class=&quot;token string&quot;&gt;&quot;version to use by Horizon. Using v3 endpoint for &quot;&lt;/span&gt;
+                  &lt;span class=&quot;token string&quot;&gt;&quot;authentication.&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+    plugin&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; unscoped_auth &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; self&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;_get_auth_backend&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;auth_url&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;**&lt;/span&gt;kwargs&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Custom 인증 모듈의 클래스에는 authenticate 메서드가 있어야 합니다. Django 인증 시스템이 Custom 인증을 실행할 때 authenticate 메서드를 호출합니다.&lt;/p&gt;
+&lt;p&gt;토큰 발급과 관련된 모듈은 2개로 아래와 같습니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;keystoneauth1&lt;/li&gt;
+&lt;li&gt;keystoneclient&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;horizon/openstack_auth/backend.py&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; openstackit&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;openstack_auth &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; user &lt;span class=&quot;token keyword&quot;&gt;as&lt;/span&gt; auth_user
+
+&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# TODO(stephenfin): Subclass &apos;django.contrib.auth.backends.BaseBackend&apos; once we&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# (only) support Django 3.0&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;token class-name&quot;&gt;KeystoneBackend&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token builtin&quot;&gt;object&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;token triple-quoted-string string&quot;&gt;&quot;&quot;&quot;Django authentication backend for use with ``django.contrib.auth``.&quot;&quot;&quot;&lt;/span&gt;
+
+  &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;authenticate&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;self&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; request&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; auth_url&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token boolean&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;**&lt;/span&gt;kwargs&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+
+    &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;
+
+    &lt;span class=&quot;token comment&quot;&gt;# If we made it here we succeeded. Create our User!&lt;/span&gt;
+    unscoped_token &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; unscoped_auth_ref&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;auth_token
+
+    user &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; auth_user&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;create_user_from_token&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+        request&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+        auth_user&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Token&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;scoped_auth_ref&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; unscoped_token&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;unscoped_token&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+        endpoint&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+        services_region&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;region_name&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+    &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; request &lt;span class=&quot;token keyword&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;token comment&quot;&gt;# if no k2k providers exist then the function returns quickly&lt;/span&gt;
+      utils&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;store_initial_k2k_session&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;auth_url&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; request&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; scoped_auth_ref&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+                                      unscoped_auth_ref&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+      request&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;session&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;unscoped_token&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; unscoped_token
+      &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; domain_auth_ref&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;token comment&quot;&gt;# check django session engine, if using cookies, this will not&lt;/span&gt;
+        &lt;span class=&quot;token comment&quot;&gt;# work, as it will overflow the cookie so don&apos;t add domain&lt;/span&gt;
+        &lt;span class=&quot;token comment&quot;&gt;# scoped token to the session and put error in the log&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; utils&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;using_cookie_backed_sessions&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+          LOG&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;error&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;Using signed cookies as SESSION_ENGINE with &apos;&lt;/span&gt;
+                    &lt;span class=&quot;token string&quot;&gt;&apos;OPENSTACK_KEYSTONE_MULTIDOMAIN_SUPPORT is &apos;&lt;/span&gt;
+                    &lt;span class=&quot;token string&quot;&gt;&apos;enabled. This disables the ability to &apos;&lt;/span&gt;
+                    &lt;span class=&quot;token string&quot;&gt;&apos;perform identity operations due to cookie size &apos;&lt;/span&gt;
+                    &lt;span class=&quot;token string&quot;&gt;&apos;constraints.&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+          request&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;session&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;domain_token&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; domain_auth_ref
+
+      request&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;user &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; user
+
+      &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Unscoped 토큰 발급이 성공적으로 이루어지면 auth&lt;em&gt;user.create&lt;/em&gt;user&lt;em&gt;from&lt;/em&gt;token() 함수를 호출해 User 인스턴스를 생성하고, 만들어진 User 인스턴스를 request.user에 저장합니다. 또한, Unscoped 토큰은 &lt;code class=&quot;language-text&quot;&gt;request.session[&amp;#39;unscoped_token&amp;#39;] = unscoped_token&lt;/code&gt; 코드에 의해 Session에 저장됩니다.&lt;/p&gt;
+&lt;h4&gt;horizon/openstack_auth/user.py&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;create_user_from_token&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;request&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; token&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; endpoint&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; services_region&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token boolean&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;# if the region is provided, use that, otherwise use the preferred region&lt;/span&gt;
+  svc_region &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; services_region &lt;span class=&quot;token keyword&quot;&gt;or&lt;/span&gt; \
+    utils&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;default_services_region&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;token&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;serviceCatalog&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; request&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; endpoint&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; User&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token builtin&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;token&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;user&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;id&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+              token&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;token&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+              user&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;token&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;user&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;name&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+              password_expires_at&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;token&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;user&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;password_expires_at&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+              user_domain_id&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;token&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;user_domain_id&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+              &lt;span class=&quot;token comment&quot;&gt;# We need to consider already logged-in users with an old&lt;/span&gt;
+              &lt;span class=&quot;token comment&quot;&gt;# version of Token without user_domain_name.&lt;/span&gt;
+              user_domain_name&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token builtin&quot;&gt;getattr&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;token&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;user_domain_name&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+              project_id&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;token&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;project&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;id&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+              project_name&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;token&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;project&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;name&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+              domain_id&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;token&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;domain&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;id&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+              domain_name&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;token&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;domain&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;name&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+              enabled&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token boolean&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+              service_catalog&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;token&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;serviceCatalog&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+              roles&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;token&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;roles&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+              endpoint&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;endpoint&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+              services_region&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;svc_region&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+              is_federated&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token builtin&quot;&gt;getattr&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;token&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;is_federated&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;False&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+              unscoped_token&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token builtin&quot;&gt;getattr&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;token&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;unscoped_token&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+                                    request&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;session&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;unscoped_token&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;create_user_from_token()&lt;/code&gt; 함수는 User 인스턴스를 생성해 Return 합니다.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/9c4fee0ebaed676ac043df529be2d821/23296/9794cda6-4b39-4754-9803-3476eae444f0.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 675px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 17.083333333333332%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAADCAIAAAAcOLh5AAAACXBIWXMAAAsSAAALEgHS3X78AAAAlUlEQVQI11XIwQqCQBDGcR+gTp3KDFFzdndmdlcjCD10KC3vBR00pfd/iAYPQfBj+H8TrC991I7xfUy6T9QMu9t72w6bax/OHTa9zLibkm5anV+L6rGsnz8BkT8VlePy4I+IVhk0xKBMuocsFyqT+JfOJAI0WFLhiS2TZy6c89YSIiOSkWsss3wcW9Ra5aBzpUGAAvgCTmAiF+bBZAIAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;9794cda6 4b39 4754 9803 3476eae444f0&quot;
+        title=&quot;&quot;
+        src=&quot;/static/9c4fee0ebaed676ac043df529be2d821/23296/9794cda6-4b39-4754-9803-3476eae444f0.png&quot;
+        srcset=&quot;/static/9c4fee0ebaed676ac043df529be2d821/8ff5a/9794cda6-4b39-4754-9803-3476eae444f0.png 240w,
+/static/9c4fee0ebaed676ac043df529be2d821/e85cb/9794cda6-4b39-4754-9803-3476eae444f0.png 480w,
+/static/9c4fee0ebaed676ac043df529be2d821/23296/9794cda6-4b39-4754-9803-3476eae444f0.png 675w&quot;
+        sizes=&quot;(max-width: 675px) 100vw, 675px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;[그림 4] token 파라미터 값 (openstackit.openstack_auth.user.Token 자료형)&lt;/p&gt;
+&lt;h4&gt;horizon/openstack_auth/views.py&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; openstack_auth &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; user &lt;span class=&quot;token keyword&quot;&gt;as&lt;/span&gt; auth_user
+
+&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;
+
+&lt;span class=&quot;token decorator annotation punctuation&quot;&gt;@sensitive_post_parameters&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token decorator annotation punctuation&quot;&gt;@csrf_protect&lt;/span&gt;
+&lt;span class=&quot;token decorator annotation punctuation&quot;&gt;@never_cache&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;login&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;request&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; template_name&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token boolean&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; extra_context&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token boolean&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;**&lt;/span&gt;kwargs&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+
+  &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;
+
+  &lt;span class=&quot;token comment&quot;&gt;# Set the session data here because django&apos;s session key rotation&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;# will erase it if we set it earlier.&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; request&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;user&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;is_authenticated&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    auth_user&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;set_session_from_user&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;request&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; request&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;user&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    regions &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;dict&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;forms&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get_region_choices&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    region &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; request&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;user&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;endpoint
+    login_region &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; request&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;POST&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;region&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    region_name &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; regions&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;login_region&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    request&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;session&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;region_endpoint&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; region
+    request&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;session&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;region_name&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; region_name
+    expiration_time &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; request&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;user&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;time_until_expiration&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    threshold_days &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; settings&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;PASSWORD_EXPIRES_WARNING_THRESHOLD_DAYS
+    &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;expiration_time &lt;span class=&quot;token keyword&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;token boolean&quot;&gt;None&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;and&lt;/span&gt;
+          expiration_time&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;days &lt;span class=&quot;token operator&quot;&gt;&amp;lt;=&lt;/span&gt; threshold_days &lt;span class=&quot;token keyword&quot;&gt;and&lt;/span&gt;
+          expiration_time &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; datetime&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;timedelta&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+      expiration_time &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;expiration_time&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;rsplit&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;:&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+      msg &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;_&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;Please consider changing your password, it will expire&apos;&lt;/span&gt;
+               &lt;span class=&quot;token string&quot;&gt;&apos; in %s minutes&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;%&lt;/span&gt;
+            expiration_time&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;replace&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;:&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos; Hours and &apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+      messages&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;warning&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;request&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; msg&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Custom 인증이 완료되면 다시, horizon/openstack&lt;em&gt;auth/views.py 로 돌아옵니다. 그리고 여기에서 token, user&lt;/em&gt;id, region&lt;em&gt;endpoint, services&lt;/em&gt;region을 추가적으로 Session에 저장합니다.&lt;/p&gt;
+&lt;h4&gt;horizon/openstack_auth/user.py&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;set_session_from_user&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;request&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; user&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  request&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;session&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;token&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; user&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;token
+  request&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;session&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;user_id&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; user&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token builtin&quot;&gt;id&lt;/span&gt;
+  request&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;session&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;region_endpoint&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; user&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;endpoint
+  request&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;session&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;services_region&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; user&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;services_region
+  &lt;span class=&quot;token comment&quot;&gt;# Update the user object cached in the request&lt;/span&gt;
+  request&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;_cached_user &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; user
+  request&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;user &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; user&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/48b78989ec338d84c912954b63dbec23/91b29/f3ebb32e-9816-4bc0-972a-2afa63bc7e1e.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 960px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 6.666666666666667%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAABCAIAAABR8BlyAAAACXBIWXMAAAsSAAALEgHS3X78AAAARElEQVQI12O4effBsbOXzl+8cu3Gnas3bl+/ff/M1Tunzpw/d+kqUOTaTaDgnRu37kHY12/evnjj3on9+6/u2njl4F4A9i0xl74sZI4AAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;f3ebb32e 9816 4bc0 972a 2afa63bc7e1e&quot;
+        title=&quot;&quot;
+        src=&quot;/static/48b78989ec338d84c912954b63dbec23/d9199/f3ebb32e-9816-4bc0-972a-2afa63bc7e1e.png&quot;
+        srcset=&quot;/static/48b78989ec338d84c912954b63dbec23/8ff5a/f3ebb32e-9816-4bc0-972a-2afa63bc7e1e.png 240w,
+/static/48b78989ec338d84c912954b63dbec23/e85cb/f3ebb32e-9816-4bc0-972a-2afa63bc7e1e.png 480w,
+/static/48b78989ec338d84c912954b63dbec23/d9199/f3ebb32e-9816-4bc0-972a-2afa63bc7e1e.png 960w,
+/static/48b78989ec338d84c912954b63dbec23/91b29/f3ebb32e-9816-4bc0-972a-2afa63bc7e1e.png 983w&quot;
+        sizes=&quot;(max-width: 960px) 100vw, 960px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;[그림 5] session_data 컬럼에 base64로 인코딩 되어 저장&lt;/p&gt;
+&lt;h1&gt;로그인 후, 서비스 요청 (시퀀스 다이어그램)&lt;/h1&gt;
+&lt;p&gt;Unscoped 토큰은 신분만 증명할 뿐, 서비스(e.g. Nova)에 서비스를 요청할 수 없습니다. 다시말해, 서비스를 요청하기 위해서는 endpoint와 범위가 지정되어 있는 Scoped 토큰이 필요합니다. Horizon은 Scoped 토큰을 얻기 위해 Session에 저장되어 있는 Unscoped 토큰으로 Keystone에게 Scoped 토큰을 요청합니다. Unscoped 토큰이 검증되어 Scoped 토큰이 성공적으로 발급되면 서비스를 요청할 수 있는 권한이 부여됩니다. 다시, Horizon은 서비스 요청 내용과 Scoped 토큰을 함께 서비스에게 보냅니다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;An unscoped token contains neither a service catalog, any roles, a project scope, nor a domain scope. Their primary use case is simply to prove your identity to keystone at a later time (usually to generate scoped tokens), without repeatedly presenting your original credentials.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;이후, 서비스는 Horizon이 보내온 Scoped 토큰을 검증하기 위해 Keystone에게 검증 의뢰를 합니다. 토큰 검증에 문제가 없다면 사용자의 서비스 요청을 실행합니다. 요청이 완료되면 그 결과를 사용자에게 보고합니다.&lt;/p&gt;
+&lt;p&gt;아래는 로그인 후, 서비스 요청 과정에 대한 다이어그램입니다.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/b70b610f5d384b72356f55e999e62435/061c7/54d4471e-0806-4090-a7c4-2b6cd6be2629.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 960px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 66.25%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAANCAIAAAAmMtkJAAAACXBIWXMAAAsSAAALEgHS3X78AAABiElEQVQoz41SXW/bMAzM//9TfVo7bMNa9GF7GZZ0ievYkSXL+pYopSerMLaiBcYHWxTvyCOpnRDi8PSktL6uJuW8PxyklM1VSvV9v7neeyG4tTbnDHdnjBnHkV0uwKWUnLVwEW5oItJahxCaCwBCMcZSSiXjR5RmxsbzGSq0Mbb/TtHpRaEgoIg2aLON+UpGvi2Gez3+cGaZL4xzrtSS6G9uJW/nf8krSndfx/7I2LQsMqbk1VBK/g9yM/Ho9TycBxjKq+eHGKzRBi28Ab9T2RzvpEBhjsH6QOb0WUkevY/r2BLljypXcjx/6/7sp4ljEblcw9ITvUrNuQT2s8Hel53ZPUXsI6E9ytmKU/AOiSbGhmFU+5uK2Vb1pnKZHq65KnTOLsrMh09Df0IP3juHV9LdlkwfD4w/NjLy+BAt+5UJU6/bhhzbffHOCl6b2tXdaN1iIYZFadfdRa+hC89rvYR2yCz4YuT6eDsLjuGDUsnIgROgqRpZ9jt4CwatBrWItDMqB3na1v4CvxzzLhOXdf0AAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;54d4471e 0806 4090 a7c4 2b6cd6be2629&quot;
+        title=&quot;&quot;
+        src=&quot;/static/b70b610f5d384b72356f55e999e62435/d9199/54d4471e-0806-4090-a7c4-2b6cd6be2629.png&quot;
+        srcset=&quot;/static/b70b610f5d384b72356f55e999e62435/8ff5a/54d4471e-0806-4090-a7c4-2b6cd6be2629.png 240w,
+/static/b70b610f5d384b72356f55e999e62435/e85cb/54d4471e-0806-4090-a7c4-2b6cd6be2629.png 480w,
+/static/b70b610f5d384b72356f55e999e62435/d9199/54d4471e-0806-4090-a7c4-2b6cd6be2629.png 960w,
+/static/b70b610f5d384b72356f55e999e62435/061c7/54d4471e-0806-4090-a7c4-2b6cd6be2629.png 1216w&quot;
+        sizes=&quot;(max-width: 960px) 100vw, 960px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;[그림 6] 로그인 후, 서비스 요청 시퀀스 다이어그램&lt;/p&gt;
+&lt;h1&gt;Django Session&lt;/h1&gt;
+&lt;p&gt;Session 기반 인증에서 Session 저장소의 위치는 중요한 이슈사항이 됩니다. 로드밸런서에 의해 트래픽이 분산되는 환경일 때, 서버 각각 Session 저장소를 분리되어 있으면 Session의 정보를 공유하고 있지 않아 사용자를 식별할 수 없는 문제가 발생됩니다.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/e8cce062bcc7d3c28cd77ac9e16567ce/adc48/c0ec7e99-05cb-431f-b43e-875f7435fa5e.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 960px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 45.833333333333336%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAJCAYAAAAywQxIAAAACXBIWXMAAAsSAAALEgHS3X78AAABIklEQVQoz31SCY6DMAzM/59ZaEGlBULITZi1TbPqVmUjWeaQx3NE4Z+z77v0nDOmaZJez7ZtcM4hxiid3/moOvhZ74ApJSzLIsP0EYXKOY/H44GmadD3PcZxRAgBqg6dsXsH5AG9GPiY4UPCuq6Y5xld10k9n8+DYSlFaHvvYa0l+oe0RIwYeCOpWi8w1mO1ATM9fy5nDC7FQPf7XdBvt5swsdYh5R2TNnDExPkk8lYXiG0mL9Op72oYBlwuFwFl440xJC0SYME0a5IWybuEkf4xOx+yMGRWHBKz4l4tUjWl+JJXyv4nyZoyM+cgjiUZZvVCgJVxIGwVz6uzQL6FwkurV6yCgdq2laSv1+sRyrcr83l9soSiBfht7e//EI4wOdQfNXe/6OXz1mgAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;c0ec7e99 05cb 431f b43e 875f7435fa5e&quot;
+        title=&quot;&quot;
+        src=&quot;/static/e8cce062bcc7d3c28cd77ac9e16567ce/d9199/c0ec7e99-05cb-431f-b43e-875f7435fa5e.png&quot;
+        srcset=&quot;/static/e8cce062bcc7d3c28cd77ac9e16567ce/8ff5a/c0ec7e99-05cb-431f-b43e-875f7435fa5e.png 240w,
+/static/e8cce062bcc7d3c28cd77ac9e16567ce/e85cb/c0ec7e99-05cb-431f-b43e-875f7435fa5e.png 480w,
+/static/e8cce062bcc7d3c28cd77ac9e16567ce/d9199/c0ec7e99-05cb-431f-b43e-875f7435fa5e.png 960w,
+/static/e8cce062bcc7d3c28cd77ac9e16567ce/adc48/c0ec7e99-05cb-431f-b43e-875f7435fa5e.png 979w&quot;
+        sizes=&quot;(max-width: 960px) 100vw, 960px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;[그림 7] 노드 각각 Session 저장소를 분리할 경우, 트래픽 분산 시 사용자를 식별할 수 없음&lt;/p&gt;
+&lt;p&gt;때문에, Django Session은 기본 설정으로 한 곳의 데이터베이스에 Session 정보를 저장하도록 되어 있습니다.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/e2cb81e56e60d1ccdace3ca50116e45f/5a3c9/e8c394b6-1da9-41dc-9dea-6ee53ba401a0.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 960px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 39.583333333333336%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAICAYAAAD5nd/tAAAACXBIWXMAAAsSAAALEgHS3X78AAAA9ElEQVQoz22SWY6EMAxEuf8t+UIsgs6+UxObCR2YKckStuzKc8KAqvM8H9FqJGMMrLVoSindteD9o5c09ElTb26M5WEyKqXm1mFZFszzDKU0aJz6cs4cQzMopXDhfQCZUQipobRDTPmuxRjrHLhmjIavxEzonMO+75BSciOTGKLK0FpXMwUf0mP1XgRC18CE67piHEdM04Rt29jI+YSP0LAuQta1PuIyNNWwX4+2ugwLhBAXIdERGTX09xdC4IHvygrGhWrqcRwHB1GRZ9uEvIb3Y7zVDAsTnZUigLaihyHD38H7HYb/fpc+J3qlVH/sn+8e5Aebg3POdPE8hgAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;e8c394b6 1da9 41dc 9dea 6ee53ba401a0&quot;
+        title=&quot;&quot;
+        src=&quot;/static/e2cb81e56e60d1ccdace3ca50116e45f/d9199/e8c394b6-1da9-41dc-9dea-6ee53ba401a0.png&quot;
+        srcset=&quot;/static/e2cb81e56e60d1ccdace3ca50116e45f/8ff5a/e8c394b6-1da9-41dc-9dea-6ee53ba401a0.png 240w,
+/static/e2cb81e56e60d1ccdace3ca50116e45f/e85cb/e8c394b6-1da9-41dc-9dea-6ee53ba401a0.png 480w,
+/static/e2cb81e56e60d1ccdace3ca50116e45f/d9199/e8c394b6-1da9-41dc-9dea-6ee53ba401a0.png 960w,
+/static/e2cb81e56e60d1ccdace3ca50116e45f/5a3c9/e8c394b6-1da9-41dc-9dea-6ee53ba401a0.png 1169w&quot;
+        sizes=&quot;(max-width: 960px) 100vw, 960px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;[그림 8] Django Session은 한 곳의 데이터베이스에 Session 정보를 저장 (Session의 정보를 공유하고 있기에 사용자 식별이 유지됨)&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/e1a98b5cf01332ed90bdc35ab8c20668/4a279/c0d82486-9b2b-48e4-bc74-50477d865b29.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 239px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 76.56903765690377%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAPCAIAAABr+ngCAAAACXBIWXMAAAsSAAALEgHS3X78AAACUElEQVQoz41ROW/UQBjd3xX4B9SUUFAgIRSUgg5ooIACEEUCRBxJCiJEDgJROEQBgYIGJaBkD9vj8Xh8jI+Zsdf2ete7eM23u1JWIER4+iyNZb/35nuvlrXjuukuHoQuY2HIPc8LgiDNsuo/UMuzVGf8Ne0SJzCo61iWjo24HcO34XB4DBmeoigYQZW6lfqGYVKDmOA/GAzG9OE/JEbk/mAAV63cr52Q6JqKCaHUGpOr452rsbZru8+U+J2Z5BEH/ziOXcd2bNukFlwNfiiHf6I20QB2GkvcLvQwtsHXApqFkMZcV1G1XtH/awRTskvwSkNsKUHkOc2WAotQaloUlGzBBcaQo6GpLUxMwzB0HUEtU3InTY12QUTKAx868z1m25aU0qSUeR5jLEmSwPccB94AjHM5JVtYW2nwly0/sMnhYR3cdIRgEDYIwcTAiqb3f0+xdnTqdjpePmDtjghDGcVSCnCD2CIoPZJCiCDkP8uyOirwKDAARcqTOl+vO6jZQFjf29sPAT5TNKSqarPZcD0fI+37/r7lehOJWgViZTksyyLPcNSlMg2YA1a2RaXgkeCwdhJH4D1yD31oIWkno3bLctozMcmymmxoooVwi7rfGojJ2OHyR0s9xPYBMlVq1zFN8v4ko9HOvd01mO7uWv7xOf7y3vy0zTYfhNuPyeo979WieLPENhaczYdi56l8u8x3lpIPq8Xn9QmrFl2agRGzM+Xts/evX3lx82q1cCG9e7736HJ243R260w+fzG/cy6fn02vnUrmTsRzJycUmF/frSoDUpdnigAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;c0d82486 9b2b 48e4 bc74 50477d865b29&quot;
+        title=&quot;&quot;
+        src=&quot;/static/e1a98b5cf01332ed90bdc35ab8c20668/4a279/c0d82486-9b2b-48e4-bc74-50477d865b29.png&quot;
+        srcset=&quot;/static/e1a98b5cf01332ed90bdc35ab8c20668/4a279/c0d82486-9b2b-48e4-bc74-50477d865b29.png 239w&quot;
+        sizes=&quot;(max-width: 239px) 100vw, 239px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;[그림 9] horizon 데이터베이스에 django_session 테이블에 저장&lt;/p&gt;
+&lt;h2&gt;Session Cookie&lt;/h2&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/a8ae29d1078fd864637504f7dae67976/ee455/ee013e72-cf46-4df8-a2e8-89b2cc0b9c49.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 863px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 20.833333333333336%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAECAIAAAABPYjBAAAACXBIWXMAAAsSAAALEgHS3X78AAAAkklEQVQI123MyQ6DMBADUP7/D3tphVJIyErINiEIaqjoqdLTyAd7up69jXUhxJhyzuWrFBpGwSepjVXaQEqZqP4Uqqh1g9CMKx8pUqvbQe2EIPTMhMLlyoG0i3JB4Z5hMT6h1mH5YlxaH3K9xjsgTMb5VPK6pdpO1OIl3VDDWD6evZ5Dxea2bscozRywPf7Cd9Q+Ulzk0Dx6yvsAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;ee013e72 cf46 4df8 a2e8 89b2cc0b9c49&quot;
+        title=&quot;&quot;
+        src=&quot;/static/a8ae29d1078fd864637504f7dae67976/ee455/ee013e72-cf46-4df8-a2e8-89b2cc0b9c49.png&quot;
+        srcset=&quot;/static/a8ae29d1078fd864637504f7dae67976/8ff5a/ee013e72-cf46-4df8-a2e8-89b2cc0b9c49.png 240w,
+/static/a8ae29d1078fd864637504f7dae67976/e85cb/ee013e72-cf46-4df8-a2e8-89b2cc0b9c49.png 480w,
+/static/a8ae29d1078fd864637504f7dae67976/ee455/ee013e72-cf46-4df8-a2e8-89b2cc0b9c49.png 863w&quot;
+        sizes=&quot;(max-width: 863px) 100vw, 863px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;[그림 10] 쿠키에 저장되는 sessionid&lt;/p&gt;
+&lt;p&gt;클라이언트는 sessionid를 쿠키로 저장합니다. 그리고 서버 요청 시 쿠키에 저장된 sessionid와 함께 보내, 서버가 사용자를 식별할 수 있도록 합니다. 만약, sessionid Name을 가진 쿠키를 지우게 되면 서버는 사용자를 식별할 수 없어 로그인이 풀리게 됩니다.&lt;/p&gt;
+&lt;p&gt;다만, 로그아웃과 달리 세션 정보를 지운 것이 아니기 때문에 예전 sessionid 값을 다시 쿠키에 담아 요청하면 다시 로그인을 유지할 수 있습니다. 아래는 이에 대한 시나리오입니다.&lt;/p&gt;
+&lt;h4&gt;- 쿠키를 제거하고 새로고침&lt;/h4&gt;
+&lt;p&gt;사용자를 식별할 수 없어 로그인이 풀림.&lt;/p&gt;
+&lt;h4&gt;- 쿠키를 이전 값으로 설정하고 새로고침&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;{
+  Name: sessionid
+  Value: yoho40qgmc9ivjy25yua78tu5pp7vpt8
+  Expires / Max-Age: 2021-02-17T08:00:20.116Z
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;인증이 유지됨.&lt;/p&gt;
+&lt;h4&gt;참고 사항&lt;/h4&gt;
+&lt;blockquote&gt;
+&lt;p&gt;sessionid 값을 다시 쿠키에 담고 새로고침할 때 URL이 중요합니다.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://localhost/auth/login/&quot;&gt;http://localhost/auth/login/&lt;/a&gt;
+의 URL에서는 성공적으로 인증이 이루어지지만,&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://localhost/auth/login/?next=/project/&quot;&gt;http://localhost/auth/login/?next=/project/&lt;/a&gt;
+next 쿼리 스트링이 존재하면
+
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 458px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 160.41666666666669%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAgCAIAAACdAM/hAAAACXBIWXMAAAsSAAALEgHS3X78AAADFElEQVQ4y5VVS3PTMBDOv2SGH8Clf4IDh557Ag4c6ZRCYULp+0GB0saOnbQl09K8aBI5sRNbku0olmU7rJykr2k7yc6XndVq199q9UgmjuPkEYkDHrPgiYAMzA3vSeoRasl78cqbmx+8+3LtvCf3k+UHowgMvvGbbxzG2O0vLEr/hP6p5OEkOdxX/bn5/ss3fJScOp9ijqJICBHyMB4mgnhBvhQcndrn5TCOIAw7NmP9B5JH9ajHRysfFrMrH1eWFr9mP3/bXlvf31pdyx7sbn9aer+zuZZdWb4OHifLxqafuDgvra9mN1azB3s7ytFh6aT4Y29HU3I/v+/tbK6fFPTc0SFj7Dr//prjGGp/YHm3CW/KhlCMsWVZBJNxt9NC7mx4Kg90G5INA1XK5V6vN9mrZDid3Ck7mREZWCOzLA8h32j3JYwJ2v32tSc1Oh1mmiOAzSmF5JiWyx1FMVXV0rSxVhTQXb1g5eXQ0qWnd3pKK5URyOUl63Rk2TAwDn91VJWUK26tRmtV0CmqYJNandbrtFZ36zeg1erAsmTZkjl3DAySP5+3tHy3WJSGqpjFk6s/l7XTy9rZX3dCe4dZuG7o4BCTFDiw7UHPDmwnGGnbGaQIbgECQs9Pt6pttBBqtlDHtMAIOJ9hq/q+59g2gDhOr2th7EShgGsUPw55gThPG8YC0yEWcbvUMzFt24QOuB9GI3hcSIMLafBIIoxoEFI2yMBlu7CZhkih7eqGqxlUN6jaxErDOW44uYattnCu4ShNBwwdETklbWL4ApKTs467WWpslVq7FwbMQUQBER3RfJNoaYLWksMCokXD1VtyqCGKvFAym0FisKTNkgblyBPID1s+aGGkGoKk9sOJIf1NL7QZMAvRNc22AS1Hk3M+5dFObxWhFKcSChHNInduVTyLyGT42b0uCDAPZxRoGCT3TNMkhEzJCa9FEMA55OMHcPqy4YBBOLTJdd1MPKPAizZq9bjbySwiohj3ueNzFoiH/ugekThdnX5Fn789efa6uLD9TzJPvTeyYAOzZQUt5dBxxfkP9CcZJFpEazcAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;6c5ed9f3 f64a 4dfc 9454 9260a072f835&quot;
+        title=&quot;&quot;
+        src=&quot;/static/5497342ce676e8a64b2f559cc0bc56ed/f7a31/6c5ed9f3-f64a-4dfc-9454-9260a072f835.png&quot;
+        srcset=&quot;/static/5497342ce676e8a64b2f559cc0bc56ed/8ff5a/6c5ed9f3-f64a-4dfc-9454-9260a072f835.png 240w,
+/static/5497342ce676e8a64b2f559cc0bc56ed/f7a31/6c5ed9f3-f64a-4dfc-9454-9260a072f835.png 458w&quot;
+        sizes=&quot;(max-width: 458px) 100vw, 458px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+에러를 발생시킵니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4&gt;base64로 디코딩한 Session 정보&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;1ef052cd5f350f2437dc34bc3026fc722b98ffb1:�}q(Uunscoped_tokenU�gAAAAABgLMgIMtPsvMIBf4vH7kapIzHVaWItsBMFjRb4TAkKgr4rVPUhVXCG6YPkDp5OuRUHlVBcDtPEUv3cpaQgjefoM5Y4zCs__6myyolZ-COyoJaFDKykgQ_F5oo7cN74J9DteTMiQio298r5O-23JeYTfdZWBgqUuser_idX 2d9eb8b0ca4f4abc8bfb74cbf8ae5238qU
+region_namecdjango.utils.functional
+_lazy_proxy_unpickle
+q(cdjango.utils.translation
+ugettext
+qUDefault Region�q}qc__builtin__
+unicode
+_auth_user_idhUregion_endpointXttp://172.16.0.250:5000/v3q
+Uservices_regionX       RegionOneq
+U
+usage_startU
+2021-02-16U_auth_user_backendU&amp;amp;openstack_auth.backend.KeystoneBackendU  usage_endU
+2021-02-17Utokencopenstack_auth.user
+Token
+q
+}q(Uunscoped_tokenqhUdomainq}q(UidqNUnameqNuUserviceCatalogq]q(}q(X     endpointsq]q(}q(XurlqXhttp://172.16.0.250:8042X interfaceqXttp://210.207.104.171:8042hXhttp://172.16.0.250:8042hX&amp;lt;http://172.16.0.250:8776/v2/273795270dc5449baf47b1dfbca19170hX?http://210.207.104.171:8776/v2/3b7d443449b64cf89e4d37a20b04a407hX&amp;lt;http://172.16.0.250:8776/v2/273795270dc5449baf47b1dfbca19170hXhttp://172.16.0.250:9292hXhttp://172.16.0.250:9292hXttp://210.207.104.171:9292hX?http://210.207.104.171:8774/v2/3b7d443449b64cf89e4d37a20b04a407hX&amp;lt;http://172.16.0.250:8774/v2/273795270dc5449baf47b1dfbca19170hX&amp;lt;http://172.16.0.250:8774/v2/273795270dc5449baf47b1dfbca19170hXhttp://172.16.0.250:9876hXttp://210.207.104.171:9876hXhttp://172.16.0.250:9876hX&amp;gt;http://172.16.0.250:8774/v2.1/273795270dc5449baf47b1dfbca19170hXAhttp://210.207.104.171:8774/v2.1/3b7d443449b64cf89e4d37a20b04a407hX&amp;gt;http://172.16.0.250:8774/v2.1/273795270dc5449baf47b1dfbca19170hXhttp://172.16.0.250:9696hXhttp://172.16.0.250:9696hXttp://210.207.104.171:9696hXhttp://192.168.140.250:35357hXttp://210.207.104.171:5000hXhttp://172.16.0.250:5000hX?http://210.207.104.171:8004/v1/3b7d443449b64cf89e4d37a20b04a407hX&amp;lt;http://172.16.0.250:8004/v1/273795270dc5449baf47b1dfbca19170hX&amp;lt;http://172.16.0.250:8004/v1/273795270dc5449baf47b1dfbca19170hXttp://210.207.104.171:8041hXhttp://172.16.0.250:8041hXhttp://172.16.0.250:8041hXttp://210.207.104.171:8082hXhttp://172.16.0.250:8082hXhttp://172.16.0.250:8082hXhttp://172.16.0.250:8780hXhttp://172.16.0.250:8780hXttp://210.207.104.171:8780hXhttp://210.207.104.171:8000/v1hXttp://172.16.0.250:8000/v1hXttp://172.16.0.250:8000/v1hX&amp;lt;http://172.16.0.250:8776/v3/273795270dc5449baf47b1dfbca19170hX?http://210.207.104.171:8776/v3/3b7d443449b64cf89e4d37a20b04a407hX&amp;lt;http://172.16.0.250:8776/v3/273795270dc5449baf47b1dfbca19170h&amp;amp;0ciso8601.iso8601
+Utc
+qo)Rqp�RqqU
+is_federatedqr�Uprojectqs}qt(hXhhjangquU     domain_idXdefaultUis_admin_project�hX 273795270dc5449baf47b1dfbca19170qvuUuserqw}qx(Upassword_expires_atNhhhXadminqyuUidqzU�gAAAAABgLMgI5Ms6zzPhNZkJcK1yTR32aIjKYCBeNhA2aIMnc6R4350OFmUP5WmKO83KI45-Uh_mUBMRmHzoTHJ9x-B8kaq_mmS0hEKFzuRXRniDvnavIPLV8BOlRJGuEItrEK-WGWs4XDJ_SunDXgazWKPAipOWZqPTLKP2hgY413HvLi8I86buGyDYnFQP25WRygWu1UHvUtenantq{htubX_session_expiryMU_auth_user_hashU(506d93b80b3981000edb8e3e0552d17645989327u.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;base64로 디코딩한 Session 정보를 확인해보면 unscoped_token 값이 저장되어 있는 것을 확인할 수 있습니다.&lt;/p&gt;
+&lt;h2&gt;로그아웃&lt;/h2&gt;
+&lt;p&gt;로그아웃 역시 Django 인증 시스템을 이용합니다. logout&lt;em&gt;then&lt;/em&gt;login() 은 로그아웃 후 다시 로그인 페이지로 이동시키는 django.contrib.auth.views 모듈의 함수이며 Session 정보를 데이터베이스에서 삭제합니다. 여기서 중요한 점은, Session에 저장되어 있던 Unscoped 토큰은 무효화 처리하지 않는다는 점입니다. (로그아웃 시 Unscoped 토큰을 무효화한 후 세션 정보를 지우는 것이 아니라 단순히 세션 정보를 DB에서 삭제)&lt;/p&gt;
+&lt;h4&gt;horizon/openstack_auth/views.py&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;logout&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;request&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; login_url&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token boolean&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;**&lt;/span&gt;kwargs&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;token triple-quoted-string string&quot;&gt;&quot;&quot;&quot;Logs out the user if he is logged in. Then redirects to the log-in page.
+
+  :param login_url:
+      Once logged out, defines the URL where to redirect after login
+
+  :param kwargs:
+      see django.contrib.auth.views.logout_then_login extra parameters.
+
+  &quot;&quot;&quot;&lt;/span&gt;
+  msg &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;Logging out user &quot;%(username)s&quot;.&apos;&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;%&lt;/span&gt; \
+      &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;username&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; request&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;user&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;username&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;
+  LOG&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;info&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;msg&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+  &lt;span class=&quot;token triple-quoted-string string&quot;&gt;&quot;&quot;&quot; Securely logs a user out. &quot;&quot;&quot;&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;utils&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;is_websso_enabled &lt;span class=&quot;token keyword&quot;&gt;and&lt;/span&gt; utils&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;is_websso_default_redirect&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;and&lt;/span&gt;
+        utils&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get_websso_default_redirect_logout&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    auth_user&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;unset_session_user_variables&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;request&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; django_http&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;HttpResponseRedirect&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+        utils&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get_websso_default_redirect_logout&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; django_auth_views&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;logout_then_login&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;request&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+                                                login_url&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;login_url&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+                                                &lt;span class=&quot;token operator&quot;&gt;**&lt;/span&gt;kwargs&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;참고&lt;/p&gt;
+&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://galid1.tistory.com/207&quot;&gt;https://galid1.tistory.com/207&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://docs.djangoproject.com/en/3.1/topics/http/sessions/&quot;&gt;https://docs.djangoproject.com/en/3.1/topics/http/sessions/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://documentation.suse.com/hpe-helion/8/html/hpe-helion-openstack-clm-all/ops-managing-identity.html&quot;&gt;https://documentation.suse.com/hpe-helion/8/html/hpe-helion-openstack-clm-all/ops-managing-identity.html&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://zenodo.org/record/34463/files/SummerStudentReport-PawelPamula.pdf?download=1&quot;&gt;https://zenodo.org/record/34463/files/SummerStudentReport-PawelPamula.pdf?download=1&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[Upgraded to Gatsby v2]]></title><description><![CDATA[This starter has been forked and upgraded to Gatsby v2]]></description><link>https://roh-j.github.io/posts/upgraded-to-gatsby-v2/</link><guid isPermaLink="false">https://roh-j.github.io/posts/upgraded-to-gatsby-v2/</guid><pubDate>Thu, 18 Oct 2018 16:51:00 GMT</pubDate><content:encoded>&lt;p&gt;This is a Gatsby v2 compatible version of the
 &lt;a href=&quot;https://github.com/alxshelepenok/gatsby-starter-lumen&quot;&gt;lumen&lt;/a&gt; starter, started
 by the folks at &lt;a href=&quot;https://www.gatsbycentral.com/&quot;&gt;Gatsby Central&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Here’s a little recommended reading for Gatsby v2.&lt;/p&gt;
