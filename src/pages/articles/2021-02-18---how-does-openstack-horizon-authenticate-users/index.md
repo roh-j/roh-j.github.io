@@ -14,17 +14,17 @@ Horizon은 클라우드 관리자와 사용자들이 다양한 OpenStack 자원�
 
 # OpenStack Horizon 인증 과정 요약
 
-|     | 과정                                                                                                                            |
-| --- | ------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Horizon은 Django의 인증 로직을 커스터마이징하여 Keystone과 연동한다.                                                            |
-| 2   | Keystone에서는 크게 2가지 유형의 토큰을 발급한다. (Unscoped 토큰, Scoped 토큰)                                                  |
-| 3   | Unscoped 토큰은 Keystone이 인증된 사용자에 대해 발급하는 신분 증명용 토큰으로 Scoped 토큰을 발급받기 위해 사용된다.             |
-| 4   | Scoped 토큰을 발급받는 이유는 Unscoped 토큰만으로는 서비스(e.g. Nova)에 요청할 수 없기 때문이다.                                |
-| 5   | Scoped 토큰은 클라이언트(e.g. 유저, Nova, Glance)가 실행할 수 있는 범위가 담겨있는 토큰으로 서비스(e.g. Nova)에 요청할 수 있다. |
-| 6   | 결국, Keystone 연동에서의 핵심은 Scoped 토큰을 발급받는 것이다.                                                                 |
-| 7   | 사용자가 인증되면 Horizon은 Unscoped 토큰을 세션에 저장한다. (추후 Scoped 토큰을 발급 받기 위해)                                |
-| 8   | 세션에 저장된 Unscoped 토큰을 이용해 Scoped 토큰을 발급 받는다.                                                                 |
-| 9   | 발급 받은 Scoped 토큰과 함께 서비스(e.g. Nova)에 요청한다.                                                                      |
+|      | 과정                                                                                                                            |
+| ---- | ------------------------------------------------------------------------------------------------------------------------------- |
+| 1.　 | Horizon은 Django의 인증 로직을 커스터마이징하여 Keystone과 연동한다.                                                            |
+| 2.　 | Keystone에서는 크게 2가지 유형의 토큰을 발급한다. (Unscoped 토큰, Scoped 토큰)                                                  |
+| 3.　 | Unscoped 토큰은 Keystone이 인증된 사용자에 대해 발급하는 신분 증명용 토큰으로 Scoped 토큰을 발급받기 위해 사용된다.             |
+| 4.　 | Scoped 토큰을 발급받는 이유는 Unscoped 토큰만으로는 서비스(e.g. Nova)에 요청할 수 없기 때문이다.                                |
+| 5.　 | Scoped 토큰은 클라이언트(e.g. 유저, Nova, Glance)가 실행할 수 있는 범위가 담겨있는 토큰으로 서비스(e.g. Nova)에 요청할 수 있다. |
+| 6.　 | 결국, Keystone 연동에서의 핵심은 Scoped 토큰을 발급받는 것이다.                                                                 |
+| 7.　 | 사용자가 인증되면 Horizon은 Unscoped 토큰을 세션에 저장한다. (추후 Scoped 토큰을 발급 받기 위해)                                |
+| 8.　 | 세션에 저장된 Unscoped 토큰을 이용해 Scoped 토큰을 발급 받는다.                                                                 |
+| 9.　 | 발급 받은 Scoped 토큰과 함께 서비스(e.g. Nova)에 요청한다.                                                                      |
 
 # 사용자 로그인 (시퀀스 다이어그램)
 
@@ -407,8 +407,6 @@ def logout(request, login_url=None, **kwargs):
 ```
 
 참고
-
----
 
 - https://galid1.tistory.com/207
 - https://docs.djangoproject.com/en/3.1/topics/http/sessions/
