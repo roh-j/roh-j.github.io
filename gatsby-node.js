@@ -34,13 +34,13 @@ exports.createPages = ({ graphql, actions }) => {
           }
         }
       }
-    `).then(result => {
+    `).then((result) => {
       if (result.errors) {
         console.log(result.errors)
         reject(result.errors)
       }
 
-      _.each(result.data.allMarkdownRemark.edges, edge => {
+      _.each(result.data.allMarkdownRemark.edges, (edge) => {
         if (_.get(edge, 'node.frontmatter.layout') === 'page') {
           createPage({
             path: edge.node.fields.slug,
@@ -60,7 +60,7 @@ exports.createPages = ({ graphql, actions }) => {
           }
 
           tags = _.uniq(tags)
-          _.each(tags, tag => {
+          _.each(tags, (tag) => {
             const tagPath = `/tags/${_.kebabCase(tag)}/`
             createPage({
               path: tagPath,
@@ -75,7 +75,7 @@ exports.createPages = ({ graphql, actions }) => {
           }
 
           categories = _.uniq(categories)
-          _.each(categories, category => {
+          _.each(categories, (category) => {
             const categoryPath = `/categories/${_.kebabCase(category)}/`
             createPage({
               path: categoryPath,
@@ -115,7 +115,7 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
 
     if (node.frontmatter.tags) {
       const tagSlugs = node.frontmatter.tags.map(
-        tag => `/tags/${_.kebabCase(tag)}/`
+        (tag) => `/tags/${_.kebabCase(tag)}/`
       )
       createNodeField({ node, name: 'tagSlugs', value: tagSlugs })
     }

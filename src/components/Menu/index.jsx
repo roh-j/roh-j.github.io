@@ -8,7 +8,7 @@ class Menu extends React.Component {
 
     const menuBlock = (
       <ul className="menu__list">
-        {menu.map(item => (
+        {menu.map((item) => (
           <li className="menu__list-item" key={item.path}>
             <Link
               to={item.path}

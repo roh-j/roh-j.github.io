@@ -1,7 +1,7 @@
 engines:
   eslint:
     enabled: true
-    channel: "eslint-3"
+    channel: 'eslint-3'
     checks:
       react/require-default-props:
         enabled: false
@@ -18,10 +18,10 @@ engines:
           mass_threshold: 75
 
 ratings:
-   paths:
-    - "**.js"
-    - "**.jsx"
-    - "**.scss"
+  paths:
+    - '**.js'
+    - '**.jsx'
+    - '**.scss'
 
 exclude_paths:
-- src/assets/fonts/**/*
+  - src/assets/fonts/**/*

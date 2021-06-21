@@ -22,7 +22,7 @@ class CategoriesRoute extends React.Component {
                 <div className="page__body">
                   <div className="categories">
                     <ul className="categories__list">
-                      {categories.map(category => (
+                      {categories.map((category) => (
                         <li
                           key={category.fieldValue}
                           className="categories__list-item"

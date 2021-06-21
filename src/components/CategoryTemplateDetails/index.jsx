@@ -6,7 +6,7 @@ class CategoryTemplateDetails extends React.Component {
     const items = []
     const { category } = this.props.pageContext
     const posts = this.props.data.allMarkdownRemark.edges
-    posts.forEach(post => {
+    posts.forEach((post) => {
       items.push(<Post data={post} key={post.node.fields.slug} />)
     })
 
