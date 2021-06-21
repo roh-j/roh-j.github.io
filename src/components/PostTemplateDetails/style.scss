@@ -156,11 +156,11 @@
     }
     &__body {
       font-size: $typographic-base-font-size * 1;
-      @include line-height(1.3);
+      @include line-height(1.25);
       @include margin-bottom(1.125);
       & p {
         font-size: $typographic-base-font-size * 1;
-        @include line-height(1.3);
+        @include line-height(1.25);
         @include margin-bottom(1.125);
       }
     }

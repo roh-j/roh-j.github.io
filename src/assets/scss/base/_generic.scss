@@ -125,7 +125,7 @@ ul {
 }
 
 p {
-  @include line-height(1);
+  @include line-height(1.25);
   @include margin-bottom(1);
 }
 
@@ -151,6 +151,10 @@ figcaption {
   font-style: italic;
   margin-bottom: 0;
   text-align: center;
+}
+
+table > tbody > tr > td {
+  @include line-height(1.25);
 }
 
 .layout {
