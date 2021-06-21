@@ -7,9 +7,8 @@ module.exports = {
   siteMetadata: {
     url,
     siteUrl: url,
-    title: 'Roh-j\'s Blog',
-    subtitle:
-      '노재희의 블로그입니다.',
+    title: "Roh-j's Blog",
+    subtitle: '안녕하세요! 노재희입니다.',
     copyright: '© Roh-j All rights reserved.',
     disqusShortname: '',
     menu: [
