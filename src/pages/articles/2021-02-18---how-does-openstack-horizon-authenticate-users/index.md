@@ -474,7 +474,7 @@ def logout(request, login_url=None, **kwargs):
                                                 **kwargs)
 ```
 
-참고
+### 레퍼런스
 
 - https://galid1.tistory.com/207
 - https://docs.djangoproject.com/en/3.1/topics/http/sessions/
