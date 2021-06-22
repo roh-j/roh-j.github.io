@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Roh-j's Blog]]></title><description><![CDATA[안녕하세요! 노재희입니다.]]></description><link>http://github.com/dylang/node-rss</link><generator>GatsbyJS</generator><lastBuildDate>Mon, 21 Jun 2021 14:00:42 GMT</lastBuildDate><item><title><![CDATA[OpenStack Horizon은 어떻게 사용자를 인증할까?]]></title><description><![CDATA[OpenStack Horizon은 어떻게 사용자를 인증, 인가하고 Keystone과 연동할까요? 이에 대한 과정을 시퀀스 다이어그램과 코드를 통해 알아봅시다.]]></description><link>https://roh-j.github.io/posts/how-does-openstack-horizon-authenticate-users/</link><guid isPermaLink="false">https://roh-j.github.io/posts/how-does-openstack-horizon-authenticate-users/</guid><pubDate>Thu, 18 Feb 2021 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Horizon은 클라우드 관리자와 사용자들이 다양한 OpenStack 자원과 서비스를 관리할 수 있는 웹 인터페이스입니다. OpenStack Horizon은 어떻게 사용자를 인증, 인가하고 Keystone과 연동할까요? 이에 대한 과정을 시퀀스 다이어그램과 코드를 통해 알아봅시다.&lt;/p&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Roh-j's Blog]]></title><description><![CDATA[안녕하세요! 노재희입니다.]]></description><link>http://github.com/dylang/node-rss</link><generator>GatsbyJS</generator><lastBuildDate>Tue, 22 Jun 2021 02:02:03 GMT</lastBuildDate><item><title><![CDATA[OpenStack Horizon은 어떻게 사용자를 인증할까?]]></title><description><![CDATA[OpenStack Horizon은 어떻게 사용자를 인증, 인가하고 Keystone과 연동할까요? 이에 대한 과정을 시퀀스 다이어그램과 코드를 통해 알아봅시다.]]></description><link>https://roh-j.github.io/posts/how-does-openstack-horizon-authenticate-users/</link><guid isPermaLink="false">https://roh-j.github.io/posts/how-does-openstack-horizon-authenticate-users/</guid><pubDate>Thu, 18 Feb 2021 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Horizon은 클라우드 관리자와 사용자들이 다양한 OpenStack 자원과 서비스를 관리할 수 있는 웹 인터페이스입니다. OpenStack Horizon은 어떻게 사용자를 인증, 인가하고 Keystone과 연동할까요? 이에 대한 과정을 시퀀스 다이어그램과 코드를 통해 알아봅시다.&lt;/p&gt;
 &lt;h1&gt;OpenStack Horizon 인증 과정 요약&lt;/h1&gt;
 &lt;table&gt;
 &lt;thead&gt;
@@ -47,7 +47,18 @@
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;h1&gt;사용자 로그인 (시퀀스 다이어그램)&lt;/h1&gt;
-&lt;p&gt;Horizon은 Django 인증 시스템을 통해 사용자를 인증합니다. 인증 과정 중 Keystone과 연동하기 위해 Custom 인증이 추가되어 있는데, 이를 &lt;code class=&quot;language-text&quot;&gt;settings.py&lt;/code&gt;의 &lt;code class=&quot;language-text&quot;&gt;AUTHENTICATION_BACKENDS&lt;/code&gt; 옵션을 통해 확인할 수 있습니다. Custom 인증의 핵심은 Keystone에서 Unscoped 토큰을 발급받는 것으로, &lt;code class=&quot;language-text&quot;&gt;openstack_auth.backend.KeystoneBackend&lt;/code&gt; 모듈에서 진행합니다. Unscoped 토큰이 성공적으로 발급되면 해당 토큰을 Django Session에 저장합니다.&lt;/p&gt;
+&lt;p&gt;Horizon은 Django 인증 시스템을 통해 사용자를 인증합니다. Keystone과 연동하기 위해 Custom 인증이 추가되어 있는데, 이를 &lt;code class=&quot;language-text&quot;&gt;settings.py&lt;/code&gt;의 &lt;code class=&quot;language-text&quot;&gt;AUTHENTICATION_BACKENDS&lt;/code&gt; 옵션을 통해 확인할 수 있습니다. Custom 인증의 핵심은 Keystone에서 Unscoped 토큰을 발급받는 것으로, &lt;code class=&quot;language-text&quot;&gt;openstack_auth.backend.KeystoneBackend&lt;/code&gt; 모듈에서 진행합니다. Unscoped 토큰이 성공적으로 발급되면 해당 토큰을 Django Session에 저장합니다.&lt;/p&gt;
+&lt;p&gt;Unscoped 토큰:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Keystone이 인증된 사용자에 대해 발급하는 신분 증명용 토큰&lt;/li&gt;
+&lt;li&gt;Scoped 토큰을 발급받기 위해 사용&lt;/li&gt;
+&lt;li&gt;서비스(e.g. Nova)에 요청 할 수 없음&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Scoped 토큰:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;클라이언트(e.g. 유저, Nova, Glance)가 실행할 수 있는 범위가 담겨있는 토큰&lt;/li&gt;
+&lt;li&gt;범위 내의 서비스(e.g. Nova)에 요청 할 수 있음&lt;/li&gt;
+&lt;/ul&gt;
 &lt;p&gt;아래는 이러한 사용자 로그인 과정을 시퀀스 다이어그램으로 표현하였습니다.&lt;/p&gt;
 &lt;p&gt;
   &lt;a
@@ -118,6 +129,7 @@
   
   &lt;/a&gt;
     &lt;/p&gt;
+&lt;p&gt;[그림 2] Horizon 콘솔 로그인&lt;/p&gt;
 &lt;p&gt;Horizon 콘솔에서 User Name과 Password를 입력하고 [Sign In] 버튼을 누르면&lt;/p&gt;
 &lt;p&gt;
   &lt;a
@@ -152,6 +164,7 @@
   
   &lt;/a&gt;
     &lt;/p&gt;
+&lt;p&gt;[그림 3] POST 파라미터&lt;/p&gt;
 &lt;p&gt;POST Method로 파라미터와 함께 &lt;a href=&quot;http://localhost/auth/login&quot;&gt;http://localhost/auth/login&lt;/a&gt; URL을 요청합니다.&lt;/p&gt;
 &lt;h2&gt;Horizon (Back-end)&lt;/h2&gt;
 &lt;h4&gt;horizon/openstack_auth/urls.py&lt;/h4&gt;
@@ -163,7 +176,7 @@
 &lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h4&gt;horizon/openstack_dashboard/settings.py&lt;/h4&gt;
 &lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;AUTHENTICATION_BACKENDS &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;openstack_auth.backend.KeystoneBackend&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;AUTHENTICATION_BACKENDS&lt;/code&gt; 옵션을 통해 Django 인증 시스템을 이용해 인증 시, 추가적인 인증 로직을 실행할 수 있습니다. 이러한 추가적인 인증을 Custom 인증이라 부릅니다.&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;AUTHENTICATION_BACKENDS&lt;/code&gt; 옵션을 통해 Django 인증 로직을 커스터마이징할 수 있습니다.&lt;/p&gt;
 &lt;h4&gt;horizon/openstack_auth/views.py&lt;/h4&gt;
 &lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; django&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;contrib&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;auth &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; views &lt;span class=&quot;token keyword&quot;&gt;as&lt;/span&gt; django_auth_views
 
@@ -188,7 +201,8 @@
       reverse&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;password&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; args&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;exc&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;user_id&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
     msg &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; _&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;Your password has expired. Please set a new password.&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
     res&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;set_cookie&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;logout_reason&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; msg&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; max_age&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;django_auth_views.LoginView.as_view()&lt;/code&gt; 를 호출하면 Django 인증 시스템이 실행됩니다. 그 후 &lt;code class=&quot;language-text&quot;&gt;AUTHENTICATION_BACKENDS&lt;/code&gt; 옵션에 따라 Custom 인증인 &lt;code class=&quot;language-text&quot;&gt;openstack_auth.backend.KeystoneBackend&lt;/code&gt; 모듈을 호출합니다. &lt;code class=&quot;language-text&quot;&gt;openstack_auth.backend.KeystoneBackend&lt;/code&gt; 모듈의 핵심은 Unscoped 토큰을 Keystone에게서 발급 받는 것으로, 모듈이 호출되면 Unscoped 토큰 발급 요청을 진행합니다.&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;django_auth_views.LoginView.as_view()&lt;/code&gt; 를 호출하면 사용자 인증 화면이 표시됩니다. 그 후, 사용자가 작성한 Form을 Submit 하게되면 Django 인증 시스템이 실행됩니다. (&lt;code class=&quot;language-text&quot;&gt;AUTHENTICATION_BACKENDS&lt;/code&gt; 옵션에 따라 Custom 인증인 &lt;code class=&quot;language-text&quot;&gt;openstack_auth.backend.KeystoneBackend&lt;/code&gt; 모듈을 호출)
+&lt;code class=&quot;language-text&quot;&gt;openstack_auth.backend.KeystoneBackend&lt;/code&gt; 모듈의 핵심은 Unscoped 토큰을 Keystone에게서 발급 받는 것으로, 모듈이 호출되면 Unscoped 토큰 발급 요청을 진행합니다.&lt;/p&gt;
 &lt;h4&gt;horizon/openstack_auth/backend.py&lt;/h4&gt;
 &lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;# TODO(stephenfin): Subclass &apos;django.contrib.auth.backends.BaseBackend&apos; once we&lt;/span&gt;
 &lt;span class=&quot;token comment&quot;&gt;# (only) support Django 3.0&lt;/span&gt;
@@ -216,9 +230,15 @@
     &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;Custom 인증 모듈의 클래스에는 authenticate 메서드가 있어야 합니다. Django 인증 시스템이 Custom 인증을 실행할 때 authenticate 메서드를 호출합니다.&lt;/p&gt;
 &lt;p&gt;토큰 발급과 관련된 모듈은 2개로 아래와 같습니다.&lt;/p&gt;
+&lt;p&gt;keystoneauth1:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;keystoneauth1&lt;/li&gt;
-&lt;li&gt;keystoneclient&lt;/li&gt;
+&lt;li&gt;OpenStack 기반 클라우드 인증을 위한 도구&lt;/li&gt;
+&lt;li&gt;오픈스택 인증 플러그인 포함 (password, token, and federation based)&lt;/li&gt;
+&lt;li&gt;클라이언트의 설정을 세션으로 유지하면서 요청할 수 있도록 함. (based on the requests Python library)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;keystoneclient:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Keystone API의 클라이언트 (CLI로 Keystone을 이용할 수 있음)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h4&gt;horizon/openstack_auth/backend.py&lt;/h4&gt;
 &lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;from&lt;/span&gt; openstackit&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;openstack_auth &lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; user &lt;span class=&quot;token keyword&quot;&gt;as&lt;/span&gt; auth_user
@@ -266,7 +286,48 @@
       request&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;user &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; user
 
       &lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Unscoped 토큰 발급이 성공적으로 이루어지면 auth&lt;em&gt;user.create&lt;/em&gt;user&lt;em&gt;from&lt;/em&gt;token() 함수를 호출해 User 인스턴스를 생성하고, 만들어진 User 인스턴스를 request.user에 저장합니다. 또한, Unscoped 토큰은 &lt;code class=&quot;language-text&quot;&gt;request.session[&amp;#39;unscoped_token&amp;#39;] = unscoped_token&lt;/code&gt; 코드에 의해 Session에 저장됩니다.&lt;/p&gt;
+&lt;h4&gt;horizon/openstack_auth/plugin/base.py&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;get_access_info&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;self&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; keystone_auth&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;token triple-quoted-string string&quot;&gt;&quot;&quot;&quot;Get the access info from an unscoped auth
+
+  This function provides the base functionality that the
+  plugins will use to authenticate and get the access info object.
+
+  :param keystone_auth: keystoneauth1 identity plugin
+  :raises: exceptions.KeystoneAuthException on auth failure
+  :returns: keystoneclient.access.AccessInfo
+  &quot;&quot;&quot;&lt;/span&gt;
+  session &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; utils&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get_session&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    unscoped_auth_ref &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; keystone_auth&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get_access&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;session&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;except&lt;/span&gt; keystone_exceptions&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ConnectFailure &lt;span class=&quot;token keyword&quot;&gt;as&lt;/span&gt; exc&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    LOG&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;error&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token builtin&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;exc&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    msg &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; _&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;Unable to establish connection to keystone endpoint.&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;raise&lt;/span&gt; exceptions&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;KeystoneConnectionException&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;msg&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;except&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;keystone_exceptions&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Unauthorized&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+          keystone_exceptions&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Forbidden&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+          keystone_exceptions&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;NotFound&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;as&lt;/span&gt; exc&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    msg &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;exc&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    LOG&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;debug&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;msg&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    match &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; re&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;match&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;r&quot;The password is expired and needs to be changed&quot;&lt;/span&gt;
+                      &lt;span class=&quot;token string&quot;&gt;r&quot; for user: ([^.]*)[.].*&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; msg&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; match&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+        exc &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; exceptions&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;KeystonePassExpiredException&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;
+            _&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;Password expired.&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        exc&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;user_id &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; match&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;group&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;raise&lt;/span&gt; exc
+    msg &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; _&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;Invalid credentials.&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;raise&lt;/span&gt; exceptions&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;KeystoneCredentialsException&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;msg&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;except&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;keystone_exceptions&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;ClientException&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+          keystone_exceptions&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;AuthorizationFailure&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;as&lt;/span&gt; exc&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    msg &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; _&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;An error occurred authenticating. &quot;&lt;/span&gt;
+            &lt;span class=&quot;token string&quot;&gt;&quot;Please try again later.&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    LOG&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;debug&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token builtin&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;exc&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;raise&lt;/span&gt; exceptions&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;KeystoneAuthException&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;msg&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;return&lt;/span&gt; unscoped_auth_ref&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;User 인스턴스를 생성하는지에 따라 Django 인증 시스템이 인증 완료 여부를 판단합니다. 즉, 인증 로직이 성공적으로 끝났다면 User 인스턴스를 생성해 Django에게 사용자가 인증되었음을 알려주어야 합니다.
+Horizon은 Unscoped 토큰 발급이 성공적으로 이루어지면 &lt;code class=&quot;language-text&quot;&gt;auth_user.create_user_from_token()&lt;/code&gt; 함수를 호출해 User 인스턴스를 생성합니다. 그리고 만들어진 User 인스턴스를 request.user에 저장합니다. (Unscoped 토큰은 request.session[‘unscoped_token’] = unscoped_token 코드에 의해 Session에 저장)&lt;/p&gt;
 &lt;h4&gt;horizon/openstack_auth/user.py&lt;/h4&gt;
 &lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;create_user_from_token&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;request&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; token&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; endpoint&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; services_region&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token boolean&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
   &lt;span class=&quot;token comment&quot;&gt;# if the region is provided, use that, otherwise use the preferred region&lt;/span&gt;
@@ -652,7 +713,7 @@ qo)Rqp�RqqU
 is_federatedqr�Uprojectqs}qt(hXhhjangquU     domain_idXdefaultUis_admin_project�hX 273795270dc5449baf47b1dfbca19170qvuUuserqw}qx(Upassword_expires_atNhhhXadminqyuUidqzU�gAAAAABgLMgI5Ms6zzPhNZkJcK1yTR32aIjKYCBeNhA2aIMnc6R4350OFmUP5WmKO83KI45-Uh_mUBMRmHzoTHJ9x-B8kaq_mmS0hEKFzuRXRniDvnavIPLV8BOlRJGuEItrEK-WGWs4XDJ_SunDXgazWKPAipOWZqPTLKP2hgY413HvLi8I86buGyDYnFQP25WRygWu1UHvUtenantq{htubX_session_expiryMU_auth_user_hashU(506d93b80b3981000edb8e3e0552d17645989327u.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;base64로 디코딩한 Session 정보를 확인해보면 unscoped_token 값이 저장되어 있는 것을 확인할 수 있습니다.&lt;/p&gt;
 &lt;h2&gt;로그아웃&lt;/h2&gt;
-&lt;p&gt;로그아웃 역시 Django 인증 시스템을 이용합니다. logout&lt;em&gt;then&lt;/em&gt;login() 은 로그아웃 후 다시 로그인 페이지로 이동시키는 django.contrib.auth.views 모듈의 함수이며 Session 정보를 데이터베이스에서 삭제합니다. 여기서 중요한 점은, Session에 저장되어 있던 Unscoped 토큰은 무효화 처리하지 않는다는 점입니다. (로그아웃 시 Unscoped 토큰을 무효화한 후 세션 정보를 지우는 것이 아니라 단순히 세션 정보를 DB에서 삭제)&lt;/p&gt;
+&lt;p&gt;로그아웃 역시 Django 인증 시스템을 이용합니다. logout&lt;em&gt;then&lt;/em&gt;login() 은 로그아웃 후 다시 로그인 페이지로 이동시키는 &lt;code class=&quot;language-text&quot;&gt;django.contrib.auth.views&lt;/code&gt; 모듈의 함수이며 Session 정보를 데이터베이스에서 삭제합니다. 여기서 중요한 점은, Session에 저장되어 있던 Unscoped 토큰은 무효화 처리하지 않는다는 점입니다. (로그아웃 시 Unscoped 토큰을 무효화한 후 세션 정보를 지우는 것이 아니라 단순히 세션 정보를 DB에서 삭제)&lt;/p&gt;
 &lt;h4&gt;horizon/openstack_auth/views.py&lt;/h4&gt;
 &lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;logout&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;request&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; login_url&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token boolean&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;**&lt;/span&gt;kwargs&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
   &lt;span class=&quot;token triple-quoted-string string&quot;&gt;&quot;&quot;&quot;Logs out the user if he is logged in. Then redirects to the log-in page.

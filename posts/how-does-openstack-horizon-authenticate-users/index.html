@@ -49,7 +49,18 @@
 </tbody>
 </table>
 <h1>사용자 로그인 (시퀀스 다이어그램)</h1>
-<p>Horizon은 Django 인증 시스템을 통해 사용자를 인증합니다. 인증 과정 중 Keystone과 연동하기 위해 Custom 인증이 추가되어 있는데, 이를 <code class="language-text">settings.py</code>의 <code class="language-text">AUTHENTICATION_BACKENDS</code> 옵션을 통해 확인할 수 있습니다. Custom 인증의 핵심은 Keystone에서 Unscoped 토큰을 발급받는 것으로, <code class="language-text">openstack_auth.backend.KeystoneBackend</code> 모듈에서 진행합니다. Unscoped 토큰이 성공적으로 발급되면 해당 토큰을 Django Session에 저장합니다.</p>
+<p>Horizon은 Django 인증 시스템을 통해 사용자를 인증합니다. Keystone과 연동하기 위해 Custom 인증이 추가되어 있는데, 이를 <code class="language-text">settings.py</code>의 <code class="language-text">AUTHENTICATION_BACKENDS</code> 옵션을 통해 확인할 수 있습니다. Custom 인증의 핵심은 Keystone에서 Unscoped 토큰을 발급받는 것으로, <code class="language-text">openstack_auth.backend.KeystoneBackend</code> 모듈에서 진행합니다. Unscoped 토큰이 성공적으로 발급되면 해당 토큰을 Django Session에 저장합니다.</p>
+<p>Unscoped 토큰:</p>
+<ul>
+<li>Keystone이 인증된 사용자에 대해 발급하는 신분 증명용 토큰</li>
+<li>Scoped 토큰을 발급받기 위해 사용</li>
+<li>서비스(e.g. Nova)에 요청 할 수 없음</li>
+</ul>
+<p>Scoped 토큰:</p>
+<ul>
+<li>클라이언트(e.g. 유저, Nova, Glance)가 실행할 수 있는 범위가 담겨있는 토큰</li>
+<li>범위 내의 서비스(e.g. Nova)에 요청 할 수 있음</li>
+</ul>
 <p>아래는 이러한 사용자 로그인 과정을 시퀀스 다이어그램으로 표현하였습니다.</p>
 <p>
   <a
@@ -120,6 +131,7 @@
   
   </a>
     </p>
+<p>[그림 2] Horizon 콘솔 로그인</p>
 <p>Horizon 콘솔에서 User Name과 Password를 입력하고 [Sign In] 버튼을 누르면</p>
 <p>
   <a
@@ -154,6 +166,7 @@
   
   </a>
     </p>
+<p>[그림 3] POST 파라미터</p>
 <p>POST Method로 파라미터와 함께 <a href="http://localhost/auth/login">http://localhost/auth/login</a> URL을 요청합니다.</p>
 <h2>Horizon (Back-end)</h2>
 <h4>horizon/openstack_auth/urls.py</h4>
@@ -165,7 +178,7 @@
 <span class="token punctuation">]</span></code></pre></div>
 <h4>horizon/openstack_dashboard/settings.py</h4>
 <div class="gatsby-highlight" data-language="python"><pre class="language-python"><code class="language-python">AUTHENTICATION_BACKENDS <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token string">'openstack_auth.backend.KeystoneBackend'</span><span class="token punctuation">,</span><span class="token punctuation">)</span></code></pre></div>
-<p><code class="language-text">AUTHENTICATION_BACKENDS</code> 옵션을 통해 Django 인증 시스템을 이용해 인증 시, 추가적인 인증 로직을 실행할 수 있습니다. 이러한 추가적인 인증을 Custom 인증이라 부릅니다.</p>
+<p><code class="language-text">AUTHENTICATION_BACKENDS</code> 옵션을 통해 Django 인증 로직을 커스터마이징할 수 있습니다.</p>
 <h4>horizon/openstack_auth/views.py</h4>
 <div class="gatsby-highlight" data-language="python"><pre class="language-python"><code class="language-python"><span class="token keyword">from</span> django<span class="token punctuation">.</span>contrib<span class="token punctuation">.</span>auth <span class="token keyword">import</span> views <span class="token keyword">as</span> django_auth_views
 
@@ -190,7 +203,8 @@
       reverse<span class="token punctuation">(</span><span class="token string">'password'</span><span class="token punctuation">,</span> args<span class="token operator">=</span><span class="token punctuation">[</span>exc<span class="token punctuation">.</span>user_id<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
     msg <span class="token operator">=</span> _<span class="token punctuation">(</span><span class="token string">"Your password has expired. Please set a new password."</span><span class="token punctuation">)</span>
     res<span class="token punctuation">.</span>set_cookie<span class="token punctuation">(</span><span class="token string">'logout_reason'</span><span class="token punctuation">,</span> msg<span class="token punctuation">,</span> max_age<span class="token operator">=</span><span class="token number">10</span><span class="token punctuation">)</span></code></pre></div>
-<p><code class="language-text">django_auth_views.LoginView.as_view()</code> 를 호출하면 Django 인증 시스템이 실행됩니다. 그 후 <code class="language-text">AUTHENTICATION_BACKENDS</code> 옵션에 따라 Custom 인증인 <code class="language-text">openstack_auth.backend.KeystoneBackend</code> 모듈을 호출합니다. <code class="language-text">openstack_auth.backend.KeystoneBackend</code> 모듈의 핵심은 Unscoped 토큰을 Keystone에게서 발급 받는 것으로, 모듈이 호출되면 Unscoped 토큰 발급 요청을 진행합니다.</p>
+<p><code class="language-text">django_auth_views.LoginView.as_view()</code> 를 호출하면 사용자 인증 화면이 표시됩니다. 그 후, 사용자가 작성한 Form을 Submit 하게되면 Django 인증 시스템이 실행됩니다. (<code class="language-text">AUTHENTICATION_BACKENDS</code> 옵션에 따라 Custom 인증인 <code class="language-text">openstack_auth.backend.KeystoneBackend</code> 모듈을 호출)
+<code class="language-text">openstack_auth.backend.KeystoneBackend</code> 모듈의 핵심은 Unscoped 토큰을 Keystone에게서 발급 받는 것으로, 모듈이 호출되면 Unscoped 토큰 발급 요청을 진행합니다.</p>
 <h4>horizon/openstack_auth/backend.py</h4>
 <div class="gatsby-highlight" data-language="python"><pre class="language-python"><code class="language-python"><span class="token comment"># TODO(stephenfin): Subclass 'django.contrib.auth.backends.BaseBackend' once we</span>
 <span class="token comment"># (only) support Django 3.0</span>
@@ -218,9 +232,15 @@
     <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span></code></pre></div>
 <p>Custom 인증 모듈의 클래스에는 authenticate 메서드가 있어야 합니다. Django 인증 시스템이 Custom 인증을 실행할 때 authenticate 메서드를 호출합니다.</p>
 <p>토큰 발급과 관련된 모듈은 2개로 아래와 같습니다.</p>
+<p>keystoneauth1:</p>
 <ul>
-<li>keystoneauth1</li>
-<li>keystoneclient</li>
+<li>OpenStack 기반 클라우드 인증을 위한 도구</li>
+<li>오픈스택 인증 플러그인 포함 (password, token, and federation based)</li>
+<li>클라이언트의 설정을 세션으로 유지하면서 요청할 수 있도록 함. (based on the requests Python library)</li>
+</ul>
+<p>keystoneclient:</p>
+<ul>
+<li>Keystone API의 클라이언트 (CLI로 Keystone을 이용할 수 있음)</li>
 </ul>
 <h4>horizon/openstack_auth/backend.py</h4>
 <div class="gatsby-highlight" data-language="python"><pre class="language-python"><code class="language-python"><span class="token keyword">from</span> openstackit<span class="token punctuation">.</span>openstack_auth <span class="token keyword">import</span> user <span class="token keyword">as</span> auth_user
@@ -268,7 +288,48 @@
       request<span class="token punctuation">.</span>user <span class="token operator">=</span> user
 
       <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span></code></pre></div>
-<p>Unscoped 토큰 발급이 성공적으로 이루어지면 auth<em>user.create</em>user<em>from</em>token() 함수를 호출해 User 인스턴스를 생성하고, 만들어진 User 인스턴스를 request.user에 저장합니다. 또한, Unscoped 토큰은 <code class="language-text">request.session[&#39;unscoped_token&#39;] = unscoped_token</code> 코드에 의해 Session에 저장됩니다.</p>
+<h4>horizon/openstack_auth/plugin/base.py</h4>
+<div class="gatsby-highlight" data-language="python"><pre class="language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">get_access_info</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> keystone_auth<span class="token punctuation">)</span><span class="token punctuation">:</span>
+  <span class="token triple-quoted-string string">"""Get the access info from an unscoped auth
+
+  This function provides the base functionality that the
+  plugins will use to authenticate and get the access info object.
+
+  :param keystone_auth: keystoneauth1 identity plugin
+  :raises: exceptions.KeystoneAuthException on auth failure
+  :returns: keystoneclient.access.AccessInfo
+  """</span>
+  session <span class="token operator">=</span> utils<span class="token punctuation">.</span>get_session<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+  <span class="token keyword">try</span><span class="token punctuation">:</span>
+    unscoped_auth_ref <span class="token operator">=</span> keystone_auth<span class="token punctuation">.</span>get_access<span class="token punctuation">(</span>session<span class="token punctuation">)</span>
+  <span class="token keyword">except</span> keystone_exceptions<span class="token punctuation">.</span>ConnectFailure <span class="token keyword">as</span> exc<span class="token punctuation">:</span>
+    LOG<span class="token punctuation">.</span>error<span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">(</span>exc<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    msg <span class="token operator">=</span> _<span class="token punctuation">(</span><span class="token string">'Unable to establish connection to keystone endpoint.'</span><span class="token punctuation">)</span>
+    <span class="token keyword">raise</span> exceptions<span class="token punctuation">.</span>KeystoneConnectionException<span class="token punctuation">(</span>msg<span class="token punctuation">)</span>
+  <span class="token keyword">except</span> <span class="token punctuation">(</span>keystone_exceptions<span class="token punctuation">.</span>Unauthorized<span class="token punctuation">,</span>
+          keystone_exceptions<span class="token punctuation">.</span>Forbidden<span class="token punctuation">,</span>
+          keystone_exceptions<span class="token punctuation">.</span>NotFound<span class="token punctuation">)</span> <span class="token keyword">as</span> exc<span class="token punctuation">:</span>
+    msg <span class="token operator">=</span> <span class="token builtin">str</span><span class="token punctuation">(</span>exc<span class="token punctuation">)</span>
+    LOG<span class="token punctuation">.</span>debug<span class="token punctuation">(</span>msg<span class="token punctuation">)</span>
+    match <span class="token operator">=</span> re<span class="token punctuation">.</span>match<span class="token punctuation">(</span><span class="token string">r"The password is expired and needs to be changed"</span>
+                      <span class="token string">r" for user: ([^.]*)[.].*"</span><span class="token punctuation">,</span> msg<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> match<span class="token punctuation">:</span>
+        exc <span class="token operator">=</span> exceptions<span class="token punctuation">.</span>KeystonePassExpiredException<span class="token punctuation">(</span>
+            _<span class="token punctuation">(</span><span class="token string">'Password expired.'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        exc<span class="token punctuation">.</span>user_id <span class="token operator">=</span> match<span class="token punctuation">.</span>group<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+        <span class="token keyword">raise</span> exc
+    msg <span class="token operator">=</span> _<span class="token punctuation">(</span><span class="token string">'Invalid credentials.'</span><span class="token punctuation">)</span>
+    <span class="token keyword">raise</span> exceptions<span class="token punctuation">.</span>KeystoneCredentialsException<span class="token punctuation">(</span>msg<span class="token punctuation">)</span>
+  <span class="token keyword">except</span> <span class="token punctuation">(</span>keystone_exceptions<span class="token punctuation">.</span>ClientException<span class="token punctuation">,</span>
+          keystone_exceptions<span class="token punctuation">.</span>AuthorizationFailure<span class="token punctuation">)</span> <span class="token keyword">as</span> exc<span class="token punctuation">:</span>
+    msg <span class="token operator">=</span> _<span class="token punctuation">(</span><span class="token string">"An error occurred authenticating. "</span>
+            <span class="token string">"Please try again later."</span><span class="token punctuation">)</span>
+    LOG<span class="token punctuation">.</span>debug<span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">(</span>exc<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">raise</span> exceptions<span class="token punctuation">.</span>KeystoneAuthException<span class="token punctuation">(</span>msg<span class="token punctuation">)</span>
+  <span class="token keyword">return</span> unscoped_auth_ref</code></pre></div>
+<p>User 인스턴스를 생성하는지에 따라 Django 인증 시스템이 인증 완료 여부를 판단합니다. 즉, 인증 로직이 성공적으로 끝났다면 User 인스턴스를 생성해 Django에게 사용자가 인증되었음을 알려주어야 합니다.
+Horizon은 Unscoped 토큰 발급이 성공적으로 이루어지면 <code class="language-text">auth_user.create_user_from_token()</code> 함수를 호출해 User 인스턴스를 생성합니다. 그리고 만들어진 User 인스턴스를 request.user에 저장합니다. (Unscoped 토큰은 request.session[‘unscoped_token’] = unscoped_token 코드에 의해 Session에 저장)</p>
 <h4>horizon/openstack_auth/user.py</h4>
 <div class="gatsby-highlight" data-language="python"><pre class="language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">create_user_from_token</span><span class="token punctuation">(</span>request<span class="token punctuation">,</span> token<span class="token punctuation">,</span> endpoint<span class="token punctuation">,</span> services_region<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
   <span class="token comment"># if the region is provided, use that, otherwise use the preferred region</span>
@@ -654,7 +715,7 @@ qo)Rqp�RqqU
 is_federatedqr�Uprojectqs}qt(hXhhjangquU     domain_idXdefaultUis_admin_project�hX 273795270dc5449baf47b1dfbca19170qvuUuserqw}qx(Upassword_expires_atNhhhXadminqyuUidqzU�gAAAAABgLMgI5Ms6zzPhNZkJcK1yTR32aIjKYCBeNhA2aIMnc6R4350OFmUP5WmKO83KI45-Uh_mUBMRmHzoTHJ9x-B8kaq_mmS0hEKFzuRXRniDvnavIPLV8BOlRJGuEItrEK-WGWs4XDJ_SunDXgazWKPAipOWZqPTLKP2hgY413HvLi8I86buGyDYnFQP25WRygWu1UHvUtenantq{htubX_session_expiryMU_auth_user_hashU(506d93b80b3981000edb8e3e0552d17645989327u.</code></pre></div>
 <p>base64로 디코딩한 Session 정보를 확인해보면 unscoped_token 값이 저장되어 있는 것을 확인할 수 있습니다.</p>
 <h2>로그아웃</h2>
-<p>로그아웃 역시 Django 인증 시스템을 이용합니다. logout<em>then</em>login() 은 로그아웃 후 다시 로그인 페이지로 이동시키는 django.contrib.auth.views 모듈의 함수이며 Session 정보를 데이터베이스에서 삭제합니다. 여기서 중요한 점은, Session에 저장되어 있던 Unscoped 토큰은 무효화 처리하지 않는다는 점입니다. (로그아웃 시 Unscoped 토큰을 무효화한 후 세션 정보를 지우는 것이 아니라 단순히 세션 정보를 DB에서 삭제)</p>
+<p>로그아웃 역시 Django 인증 시스템을 이용합니다. logout<em>then</em>login() 은 로그아웃 후 다시 로그인 페이지로 이동시키는 <code class="language-text">django.contrib.auth.views</code> 모듈의 함수이며 Session 정보를 데이터베이스에서 삭제합니다. 여기서 중요한 점은, Session에 저장되어 있던 Unscoped 토큰은 무효화 처리하지 않는다는 점입니다. (로그아웃 시 Unscoped 토큰을 무효화한 후 세션 정보를 지우는 것이 아니라 단순히 세션 정보를 DB에서 삭제)</p>
 <h4>horizon/openstack_auth/views.py</h4>
 <div class="gatsby-highlight" data-language="python"><pre class="language-python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">logout</span><span class="token punctuation">(</span>request<span class="token punctuation">,</span> login_url<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">)</span><span class="token punctuation">:</span>
   <span class="token triple-quoted-string string">"""Logs out the user if he is logged in. Then redirects to the log-in page.
