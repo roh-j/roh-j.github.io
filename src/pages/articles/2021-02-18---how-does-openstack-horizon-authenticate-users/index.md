@@ -28,7 +28,18 @@ Horizon은 클라우드 관리자와 사용자들이 다양한 OpenStack 자원�
 
 # 사용자 로그인 (시퀀스 다이어그램)
 
-Horizon은 Django 인증 시스템을 통해 사용자를 인증합니다. 인증 과정 중 Keystone과 연동하기 위해 Custom 인증이 추가되어 있는데, 이를 `settings.py`의 `AUTHENTICATION_BACKENDS` 옵션을 통해 확인할 수 있습니다. Custom 인증의 핵심은 Keystone에서 Unscoped 토큰을 발급받는 것으로, `openstack_auth.backend.KeystoneBackend` 모듈에서 진행합니다. Unscoped 토큰이 성공적으로 발급되면 해당 토큰을 Django Session에 저장합니다.
+Horizon은 Django 인증 시스템을 통해 사용자를 인증합니다. Keystone과 연동하기 위해 Custom 인증이 추가되어 있는데, 이를 `settings.py`의 `AUTHENTICATION_BACKENDS` 옵션을 통해 확인할 수 있습니다. Custom 인증의 핵심은 Keystone에서 Unscoped 토큰을 발급받는 것으로, `openstack_auth.backend.KeystoneBackend` 모듈에서 진행합니다. Unscoped 토큰이 성공적으로 발급되면 해당 토큰을 Django Session에 저장합니다.
+
+Unscoped 토큰:
+
+- Keystone이 인증된 사용자에 대해 발급하는 신분 증명용 토큰
+- Scoped 토큰을 발급받기 위해 사용
+- 서비스(e.g. Nova)에 요청 할 수 없음
+
+Scoped 토큰:
+
+- 클라이언트(e.g. 유저, Nova, Glance)가 실행할 수 있는 범위가 담겨있는 토큰
+- 범위 내의 서비스(e.g. Nova)에 요청 할 수 있음
 
 아래는 이러한 사용자 로그인 과정을 시퀀스 다이어그램으로 표현하였습니다.
 
@@ -40,9 +51,13 @@ Horizon은 Django 인증 시스템을 통해 사용자를 인증합니다. 인�
 
 ![](./images/bc4f932b-5177-4cfe-9aaa-85ee5570807d.png)
 
+[그림 2] Horizon 콘솔 로그인
+
 Horizon 콘솔에서 User Name과 Password를 입력하고 [Sign In] 버튼을 누르면
 
 ![](./images/3dd68033-693a-41d9-bb67-f028172813a8.png)
+
+[그림 3] POST 파라미터
 
 POST Method로 파라미터와 함께 http://localhost/auth/login URL을 요청합니다.
 
@@ -65,7 +80,7 @@ urlpatterns = [
 AUTHENTICATION_BACKENDS = ('openstack_auth.backend.KeystoneBackend',)
 ```
 
-`AUTHENTICATION_BACKENDS` 옵션을 통해 Django 인증 시스템을 이용해 인증 시, 추가적인 인증 로직을 실행할 수 있습니다. 이러한 추가적인 인증을 Custom 인증이라 부릅니다.
+`AUTHENTICATION_BACKENDS` 옵션을 통해 Django 인증 로직을 커스터마이징할 수 있습니다.
 
 #### horizon/openstack_auth/views.py
 
@@ -95,7 +110,8 @@ def login(request):
     res.set_cookie('logout_reason', msg, max_age=10)
 ```
 
-`django_auth_views.LoginView.as_view()` 를 호출하면 Django 인증 시스템이 실행됩니다. 그 후 `AUTHENTICATION_BACKENDS` 옵션에 따라 Custom 인증인 `openstack_auth.backend.KeystoneBackend` 모듈을 호출합니다. `openstack_auth.backend.KeystoneBackend` 모듈의 핵심은 Unscoped 토큰을 Keystone에게서 발급 받는 것으로, 모듈이 호출되면 Unscoped 토큰 발급 요청을 진행합니다.
+`django_auth_views.LoginView.as_view()` 를 호출하면 사용자 인증 화면이 표시됩니다. 그 후, 사용자가 작성한 Form을 Submit 하게되면 Django 인증 시스템이 실행됩니다. (`AUTHENTICATION_BACKENDS` 옵션에 따라 Custom 인증인 `openstack_auth.backend.KeystoneBackend` 모듈을 호출)
+`openstack_auth.backend.KeystoneBackend` 모듈의 핵심은 Unscoped 토큰을 Keystone에게서 발급 받는 것으로, 모듈이 호출되면 Unscoped 토큰 발급 요청을 진행합니다.
 
 #### horizon/openstack_auth/backend.py
 
@@ -130,8 +146,15 @@ Custom 인증 모듈의 클래스에는 authenticate 메서드가 있어야 합�
 
 토큰 발급과 관련된 모듈은 2개로 아래와 같습니다.
 
-- keystoneauth1
-- keystoneclient
+keystoneauth1:
+
+- OpenStack 기반 클라우드 인증을 위한 도구
+- 오픈스택 인증 플러그인 포함 (password, token, and federation based)
+- 클라이언트의 설정을 세션으로 유지하면서 요청할 수 있도록 함. (based on the requests Python library)
+
+keystoneclient:
+
+- Keystone API의 클라이언트 (CLI로 Keystone을 이용할 수 있음)
 
 #### horizon/openstack_auth/backend.py
 
@@ -183,7 +206,52 @@ class KeystoneBackend(object):
       ...
 ```
 
-Unscoped 토큰 발급이 성공적으로 이루어지면 auth_user.create_user_from_token() 함수를 호출해 User 인스턴스를 생성하고, 만들어진 User 인스턴스를 request.user에 저장합니다. 또한, Unscoped 토큰은 `request.session['unscoped_token'] = unscoped_token` 코드에 의해 Session에 저장됩니다.
+#### horizon/openstack_auth/plugin/base.py
+
+```python
+def get_access_info(self, keystone_auth):
+  """Get the access info from an unscoped auth
+
+  This function provides the base functionality that the
+  plugins will use to authenticate and get the access info object.
+
+  :param keystone_auth: keystoneauth1 identity plugin
+  :raises: exceptions.KeystoneAuthException on auth failure
+  :returns: keystoneclient.access.AccessInfo
+  """
+  session = utils.get_session()
+
+  try:
+    unscoped_auth_ref = keystone_auth.get_access(session)
+  except keystone_exceptions.ConnectFailure as exc:
+    LOG.error(str(exc))
+    msg = _('Unable to establish connection to keystone endpoint.')
+    raise exceptions.KeystoneConnectionException(msg)
+  except (keystone_exceptions.Unauthorized,
+          keystone_exceptions.Forbidden,
+          keystone_exceptions.NotFound) as exc:
+    msg = str(exc)
+    LOG.debug(msg)
+    match = re.match(r"The password is expired and needs to be changed"
+                      r" for user: ([^.]*)[.].*", msg)
+    if match:
+        exc = exceptions.KeystonePassExpiredException(
+            _('Password expired.'))
+        exc.user_id = match.group(1)
+        raise exc
+    msg = _('Invalid credentials.')
+    raise exceptions.KeystoneCredentialsException(msg)
+  except (keystone_exceptions.ClientException,
+          keystone_exceptions.AuthorizationFailure) as exc:
+    msg = _("An error occurred authenticating. "
+            "Please try again later.")
+    LOG.debug(str(exc))
+    raise exceptions.KeystoneAuthException(msg)
+  return unscoped_auth_ref
+```
+
+User 인스턴스를 생성하는지에 따라 Django 인증 시스템이 인증 완료 여부를 판단합니다. 즉, 인증 로직이 성공적으로 끝났다면 User 인스턴스를 생성해 Django에게 사용자가 인증되었음을 알려주어야 합니다.
+Horizon은 Unscoped 토큰 발급이 성공적으로 이루어지면 `auth_user.create_user_from_token()` 함수를 호출해 User 인스턴스를 생성합니다. 그리고 만들어진 User 인스턴스를 request.user에 저장합니다. (Unscoped 토큰은 request.session['unscoped_token'] = unscoped_token 코드에 의해 Session에 저장)
 
 #### horizon/openstack_auth/user.py
 
@@ -375,7 +443,7 @@ base64로 디코딩한 Session 정보를 확인해보면 unscoped_token 값이 �
 
 ## 로그아웃
 
-로그아웃 역시 Django 인증 시스템을 이용합니다. logout_then_login() 은 로그아웃 후 다시 로그인 페이지로 이동시키는 django.contrib.auth.views 모듈의 함수이며 Session 정보를 데이터베이스에서 삭제합니다. 여기서 중요한 점은, Session에 저장되어 있던 Unscoped 토큰은 무효화 처리하지 않는다는 점입니다. (로그아웃 시 Unscoped 토큰을 무효화한 후 세션 정보를 지우는 것이 아니라 단순히 세션 정보를 DB에서 삭제)
+로그아웃 역시 Django 인증 시스템을 이용합니다. logout_then_login() 은 로그아웃 후 다시 로그인 페이지로 이동시키는 `django.contrib.auth.views` 모듈의 함수이며 Session 정보를 데이터베이스에서 삭제합니다. 여기서 중요한 점은, Session에 저장되어 있던 Unscoped 토큰은 무효화 처리하지 않는다는 점입니다. (로그아웃 시 Unscoped 토큰을 무효화한 후 세션 정보를 지우는 것이 아니라 단순히 세션 정보를 DB에서 삭제)
 
 #### horizon/openstack_auth/views.py
 
