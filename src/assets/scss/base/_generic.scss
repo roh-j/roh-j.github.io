@@ -130,13 +130,9 @@ p {
 }
 
 blockquote {
-  & p {
-    padding: 1em;
-  }
-  @include margin-bottom(1);
   font-style: italic;
   text-align: center;
-  background: #f5f2f0;
+  @include margin-bottom(1.125);
 }
 
 figure {
@@ -155,16 +151,6 @@ figcaption {
   text-align: center;
 }
 
-table {
-  & tbody {
-    & tr {
-      & td {
-        @include line-height(1.25);
-      }
-    }
-  }
-}
-
 .layout {
   lost-center: $layout-width;
 }
@@ -172,6 +158,16 @@ table {
 .content {
   &__inner {
     padding: 25px 20px;
+  }
+}
+
+table {
+  & tbody {
+    & tr {
+      & td {
+        @include line-height(1.25);
+      }
+    }
   }
 }
 
