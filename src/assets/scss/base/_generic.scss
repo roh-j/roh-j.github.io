@@ -130,8 +130,10 @@ p {
 }
 
 blockquote {
-  padding: 1em;
-  margin: 0.5em 0;
+  & p {
+    padding: 1em;
+  }
+  @include margin-bottom(1);
   font-style: italic;
   text-align: center;
   background: #f5f2f0;
@@ -153,8 +155,14 @@ figcaption {
   text-align: center;
 }
 
-table > tbody > tr > td {
-  @include line-height(1.25);
+table {
+  & tbody {
+    & tr {
+      & td {
+        @include line-height(1.25);
+      }
+    }
+  }
 }
 
 .layout {
