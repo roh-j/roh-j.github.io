@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Roh-j's Blog]]></title><description><![CDATA[안녕하세요! 노재희입니다.]]></description><link>http://github.com/dylang/node-rss</link><generator>GatsbyJS</generator><lastBuildDate>Tue, 22 Jun 2021 08:57:33 GMT</lastBuildDate><item><title><![CDATA[CORS (Cross-Origin Resource Sharing)가 무엇일까?]]></title><description><![CDATA[Front-end 개발 하면서 한번쯤 마주쳤던 CORS (Cross-Origin Resource Sharing)에 대해 알아봅시다.]]></description><link>https://roh-j.github.io/posts/what-is-cors/</link><guid isPermaLink="false">https://roh-j.github.io/posts/what-is-cors/</guid><pubDate>Thu, 29 Apr 2021 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;CORS (Cross-Origin Resource Sharing)&lt;/h1&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Roh-j's Blog]]></title><description><![CDATA[안녕하세요! 노재희입니다.]]></description><link>http://github.com/dylang/node-rss</link><generator>GatsbyJS</generator><lastBuildDate>Wed, 23 Jun 2021 02:01:55 GMT</lastBuildDate><item><title><![CDATA[CORS (Cross-Origin Resource Sharing)가 무엇일까?]]></title><description><![CDATA[Front-end 개발 하면서 한번쯤 마주쳤던 CORS (Cross-Origin Resource Sharing)에 대해 알아봅시다.]]></description><link>https://roh-j.github.io/posts/what-is-cors/</link><guid isPermaLink="false">https://roh-j.github.io/posts/what-is-cors/</guid><pubDate>Thu, 29 Apr 2021 00:00:00 GMT</pubDate><content:encoded>&lt;h1&gt;CORS (Cross-Origin Resource Sharing)&lt;/h1&gt;
 &lt;h2&gt;1. CORS 개요&lt;/h2&gt;
 &lt;p&gt;CORS (교차 출처 자원 공유)는 보안 상의 이유로, JavaScript에서 보내는 교차 출처 (자신과 다른 출처) HTTP 요청을 제한하기 위한 정책입니다. 대다수 브라우저에는 CORS가 적용되어 있는데, 이는 자신의 출처와 동일한 리소스만 불러올 수 있도록 하여, 악의적인 자원 접근과 탈취를 막기 위함입니다.&lt;/p&gt;
 &lt;h2&gt;2. CORS 에러&lt;/h2&gt;
@@ -121,7 +121,1030 @@ $&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&q
 &lt;li&gt;&lt;a href=&quot;https://medium.com/@buddhiv/what-is-cors-or-cross-origin-resource-sharing-eccbfacaaa30&quot;&gt;https://medium.com/@buddhiv/what-is-cors-or-cross-origin-resource-sharing-eccbfacaaa30&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://developer.mozilla.org/ko/docs/Web/HTTP/CORS&quot;&gt;https://developer.mozilla.org/ko/docs/Web/HTTP/CORS&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://evan-moon.github.io/2020/05/21/about-cors/#preflight-request&quot;&gt;https://evan-moon.github.io/2020/05/21/about-cors/#preflight-request&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[OpenStack Horizon은 어떻게 사용자를 인증할까?]]></title><description><![CDATA[OpenStack Horizon은 어떻게 사용자를 인증, 인가하고 Keystone과 연동할까요? 이에 대한 과정을 시퀀스 다이어그램과 코드를 통해 알아봅시다.]]></description><link>https://roh-j.github.io/posts/how-does-openstack-horizon-authenticate-users/</link><guid isPermaLink="false">https://roh-j.github.io/posts/how-does-openstack-horizon-authenticate-users/</guid><pubDate>Thu, 18 Feb 2021 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Horizon은 클라우드 관리자와 사용자들이 다양한 OpenStack 자원과 서비스를 관리할 수 있는 웹 인터페이스입니다. OpenStack Horizon은 어떻게 사용자를 인증, 인가하고 Keystone과 연동할까요? 이에 대한 과정을 시퀀스 다이어그램과 코드를 통해 알아봅시다.&lt;/p&gt;
+&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[VirtualBox를 이용해 OpenStack 설치하기 (네트워크 구성편)]]></title><description><![CDATA[VirtualBox를 이용한 OpenStack 설치 방법을 소개합니다.]]></description><link>https://roh-j.github.io/posts/how-to-install-openstack-on-virtualbox/</link><guid isPermaLink="false">https://roh-j.github.io/posts/how-to-install-openstack-on-virtualbox/</guid><pubDate>Tue, 30 Mar 2021 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;VirtualBox 기본 설정&lt;/h2&gt;
+&lt;h3&gt;VirtualBox 다운로드&lt;/h3&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/ab4f3e14a249eda9c7aba4a823c1bd57/1e043/ca8259cb-e0be-4cce-be28-4c6dd20860ff.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 690px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 60%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsSAAALEgHS3X78AAAChElEQVQoz3VRa08TURDdH+cP8KsfDBpDYqISYyIgGERJUJFoMAEBKwpU44MPCGIrYlHAQtSIFdrGpFS7fXfbfXW7bffR49y7ATXqJCfnzp2Zc2fmCleffMLFySC67gTQ7/+A8751dBK6p94foHd6Cxfuh9HzYJP77MzuPD/M8zt9GxzCyKO3GJp4hlODM+i4uYDxpV3cDUbRNxXCmVvz6B5/hfOjLzH4cANXZtbQM7mMtsuzOHd7kecMPd6kmh2MLUY4hMm5NRzrGsGh9mGcuOTH+m4Obz5/x7WpJbT1juH04DTOXp9Fe78Phztu4OTAPRzpGsXR3gkc7/Nh2L+CcLyIlW0RoS9pCGJBw3xgEx0Ds3i9EUVJa+Dd1jYWgiE8D6xicXkNwdUw5YTgn3uBp/MBfNxN4psoYSeRQyJbgVjUkCIwFlwAhtmAolbBrNG0IavaASqyClXTISsq9KoBTa9CobPC4oqGpuXAdlxYNoMDQddtmKbLxVy3BbRaKBTyiEajiMfjEEUR8VgMuVyO57Qo/sta5Lsc+yaoqoWUaKJq2PzCcRyUyxLS6TSJpUm8gEwmwwXZuVQqIZvNQiIuFivI5SXOCnVr2RYERbGo0ATjfUFVVSHLFRIokniZQ5Ik7suyTOJ5fpfP10iwTo9YFNOJixBM06FAgzqq0/5cGtvhXaRSP6gwS8hQTCQ/xYVYtwymaULXLVSrNoyaQ9yAYVQhNBsOsjl6RWqi2fT2oWkqEokk9vaKtI4yjVhAIe91xUZn/D8TNM2mF+tgnXojewuWyjVEIgYiXw3azd+F7HP+BcGyXP4hjL2f9rosVzTEYjqSyRrSGRP1usN/1Yu3/hD93X4C6DJTS0PDxyYAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;ca8259cb e0be 4cce be28 4c6dd20860ff&quot;
+        title=&quot;&quot;
+        src=&quot;/static/ab4f3e14a249eda9c7aba4a823c1bd57/1e043/ca8259cb-e0be-4cce-be28-4c6dd20860ff.png&quot;
+        srcset=&quot;/static/ab4f3e14a249eda9c7aba4a823c1bd57/8ff5a/ca8259cb-e0be-4cce-be28-4c6dd20860ff.png 240w,
+/static/ab4f3e14a249eda9c7aba4a823c1bd57/e85cb/ca8259cb-e0be-4cce-be28-4c6dd20860ff.png 480w,
+/static/ab4f3e14a249eda9c7aba4a823c1bd57/1e043/ca8259cb-e0be-4cce-be28-4c6dd20860ff.png 690w&quot;
+        sizes=&quot;(max-width: 690px) 100vw, 690px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.virtualbox.org/wiki/Downloads&quot;&gt;https://www.virtualbox.org/wiki/Downloads&lt;/a&gt; 에서 PC의 OS에 맞는 VirtualBox 설치 파일을 다운로드 받습니다. (본 글은 Ubuntu 18.04 기준으로 설명하며, 설치 과정은 동일합니다!)&lt;/p&gt;
+&lt;p&gt;VirtualBox 6.1.18 platform packages &gt; Linux distributions 링크를 클릭합니다.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/1f8736759b0bd8dacc6d98140d70d0fa/1e043/113e708e-7d65-42e5-a059-da2705e85773.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 690px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 66.66666666666666%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAANCAYAAACpUE5eAAAACXBIWXMAAAsSAAALEgHS3X78AAACZUlEQVQ4y31S+2vTYBTNn6m/iqAMBH/aRrWKDukQlf3isOxpVx9j4JA5QSbDsXXOB7jp2rmubdomaZO0a9MkTZvn8eZrx7oHXjh8l5t7z3fOzceNv9lBNL6Ku7NfEJn/ipHpTYzObCEyl0I0sYN7C99wP/m9V5vfxsPXP3GH+ob7faOzqTPgxqdXcWtsClcjc4iv7GJpq4DRyVVcG0ti6PESRiY/4vbEe1x/9ApXIjO4EVvEk8Vt1pdcP0RiLYPE51NwHzb2cDM6haEHSezmFGz8yOB5cgXjL97i2dwynYsYjsXxdOYdYvElRCcW8HJ5HWupX/iU2sOBoCFTbhCaSJeOwXl+gFyxCklpwnY9ZHMF5PI8CnwR5bKIUkmAIIjgiyWIUgWVShW5Ao+/2SN28vS9UBSQ50uoyDVwuu7CdcHC930cH9eJqAxRFIlIIMIyJElipGEeQpZl1Os6VLUNQ2+j07FgWW04jgNOVbsQRIvIAkZYq9UYgSyTakmEolShaQ02YJo6DKNFAlwEQSgAF4IzDBey0qUBj5oCtFoaeF4i1ElVA9kjhdSaaGo+wSNl7gBRwGYGwSzn822y6vSLLikzkU6bOMxaRGihWLSo1iHVPTeeF/To+iQnOVOoaQ7davd3GJAdm5S1sJ/WUal26FtP/fk4Ibhg2XF8dLs+a+jt0SFFLWQODNi2369dtDaIMwoH2cNBz7PpL5PCfR2NpoNwx+45i/8Dd3rLqUJBNPD7jwHD9Ni+Ljd3eXCDckNC2+7S+2qRbYOUNiiv0R7r7DnVCaqqsjw8ZVmhp2TSjE1r67J3+A/kzLNMmedbowAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;113e708e 7d65 42e5 a059 da2705e85773&quot;
+        title=&quot;&quot;
+        src=&quot;/static/1f8736759b0bd8dacc6d98140d70d0fa/1e043/113e708e-7d65-42e5-a059-da2705e85773.png&quot;
+        srcset=&quot;/static/1f8736759b0bd8dacc6d98140d70d0fa/8ff5a/113e708e-7d65-42e5-a059-da2705e85773.png 240w,
+/static/1f8736759b0bd8dacc6d98140d70d0fa/e85cb/113e708e-7d65-42e5-a059-da2705e85773.png 480w,
+/static/1f8736759b0bd8dacc6d98140d70d0fa/1e043/113e708e-7d65-42e5-a059-da2705e85773.png 690w&quot;
+        sizes=&quot;(max-width: 690px) 100vw, 690px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;Ubuntu 18.04 / 18.10 / 19.04 링크를 클릭해 설치파일을 다운로드합니다.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/2be8105704d4e8176c920c2403888bc7/1e043/5989c30f-5cb1-49e4-9253-f20629797d28.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 690px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 100%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAIAAAAC64paAAAACXBIWXMAAAsSAAALEgHS3X78AAADRElEQVQ4y31S+28bRRC+Pw+k/oRA4rciIRQerYQo6ouCKipLVGmhaohAUXBTJaHB0NLQAlGiQqU8oAk0CWCHENu1b28fvr29vdt7P2wzdxZSEwGfRrOzd/PNzs63WmVh673plVMT997/fPP0Z2tgZ6rr52d+ggD8+ZmNs9X1szc2wN65+fO5Gxvw8UyZBqZNfLH2UfXO21dvjX1w+/rizqff/jFe2xy7XLsw/eDc1Ar4K7WtytzaiQ+/funSfGV+/eLMw2t3fp28t/vxNzva1Ferz524/OLpT555beL7zc7K4+7s0uMXTl1/c/zW65WbL1+cPv7u1PNvXRu7NPPsG+OvVmaPnbw6t7zzwy5e+qWjNQ27trj6yoXq5OwDYoePdv9cXHq4sLg8++X9u8urc7e/m5q/O1ldqN3/cWsPbe/jR/Vuo2N2qNMiUsv7A0eF+00jzftJlkvX63EhpVt6JWzZM7nJBXjLsjkXjqMgM06zOM21OOrHcX84HA4G4Ia2LfYa9e3t7VarvddoNOr1IAjgZ/8fDPplXgnNdTNMIt/PRnvXdSmlCBmcc8ZYj/Vs2/aUktKR0IlSjoQPFliSxAW53Q6FSEdkz1O9Xo8VvMJzbhqGYZomIRQTw7IkQgGlIaURY1LzgxyTmLIkSYvmXcehkIdxcSqDJgiQObcIIVDLdX3TTGw7te3MEp4GtyA0NoxIqaJzaK7VbjWbTyAZIQwRxgRqHRwceL4/PAwt8HOEIldlMLBiHoO+54WtlldveIzFo0EOnsIhchjmkBQEOWxG5CCI9//yf/vdxyTN8uH/QHt6A4WTJFHK5ZYSwuNcWZYXRVEYRX4QgAHSNP13cimVoyMDYwdjgTEiBOsIUcpGZM/z/pMMN/J9H6SixDJNCYFZCgYL6A86CyFsIeAJFPpb5iFy+YRypaKeGZlgvDBuJaYZh2EK48hLwO3KNTvatsU5QghOK4WloBKcT0owykCzkfqYEGHxo2Tluu12G3SGNF2nzVYXdKaMIh3ujqAWKkZAoVaaZUenHUeRLSVjMDaJsWsg6bgqDItRKVf5JSD2/QCmcPRkYfnNpgU0hKRhgMddvaN3db1boAh0vfOkA+fDs/0bE/YktB019I0AAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;5989c30f 5cb1 49e4 9253 f20629797d28&quot;
+        title=&quot;&quot;
+        src=&quot;/static/2be8105704d4e8176c920c2403888bc7/1e043/5989c30f-5cb1-49e4-9253-f20629797d28.png&quot;
+        srcset=&quot;/static/2be8105704d4e8176c920c2403888bc7/8ff5a/5989c30f-5cb1-49e4-9253-f20629797d28.png 240w,
+/static/2be8105704d4e8176c920c2403888bc7/e85cb/5989c30f-5cb1-49e4-9253-f20629797d28.png 480w,
+/static/2be8105704d4e8176c920c2403888bc7/1e043/5989c30f-5cb1-49e4-9253-f20629797d28.png 690w&quot;
+        sizes=&quot;(max-width: 690px) 100vw, 690px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;VirtualBox 6.1.18 Oracle VM VirtualBox Extension Pack &gt; All supported platforms 링크를 클릭합니다.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/255d6fbf4ffcdb55113bc929ec5c8935/48711/47812964-a9b0-40a3-9cc9-eb4875cc232f.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 459px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 20.416666666666668%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAECAYAAACOXx+WAAAACXBIWXMAAAsSAAALEgHS3X78AAAAxklEQVQY002PuQ7CMBBE8/8fQ0PDFyBBQYcQEgWHkjiOnQQTx3EODbuLCyyNdjR76Dn7mCfe+o4wjhiGASPVMfm+78WHEOC9T3mQXoxRKiuQvP9l2e20w+WwRdO0qOsa1loYY6C1Rp7n5K34qqpopqGqYanvnKM8zdNeUZZ4U5Y58yLCB6Z5FhLWvCxYkpgqxkk8k/Ack7Dmv511XcEvux63OO83sERYFAWUUui6Tmjalqm1kLMUUfxoFer0i7JUsufcRw5+AQ6+MEsiGwnnAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;47812964 a9b0 40a3 9cc9 eb4875cc232f&quot;
+        title=&quot;&quot;
+        src=&quot;/static/255d6fbf4ffcdb55113bc929ec5c8935/48711/47812964-a9b0-40a3-9cc9-eb4875cc232f.png&quot;
+        srcset=&quot;/static/255d6fbf4ffcdb55113bc929ec5c8935/8ff5a/47812964-a9b0-40a3-9cc9-eb4875cc232f.png 240w,
+/static/255d6fbf4ffcdb55113bc929ec5c8935/48711/47812964-a9b0-40a3-9cc9-eb4875cc232f.png 459w&quot;
+        sizes=&quot;(max-width: 459px) 100vw, 459px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;VirtualBox 설치 파일과 Extension Pack 파일이 정상적으로 다운로드 되었는지 확인합니다.&lt;/p&gt;
+&lt;h3&gt;VirtualBox 설치&lt;/h3&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/163d0f30e681b6ef38ac7e348f993bea/7cb89/d1ab391f-1ffb-408f-91f6-000759486af3.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 563px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 108.33333333333333%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAWCAYAAADAQbwGAAAACXBIWXMAAAsSAAALEgHS3X78AAACxklEQVQ4y5VU2W7TUBDNd0HLA10lRKkQEognPgB+hRaSNOWFTwCeKiFRgSokFLpnb9IlceI4jpfEziKyyIeZSWxFKE3Dw/HM3Dt3PJ5zrkPrqw+GBKws3fdWlxfYClaXFrD88B42N9bw8sUmnj97jKdP1rG2sih7nCsgn9a8Dcp79WjRC0Uj7xCNbHuR8BYi4W3Eou8R2wljl+D7H2JR7MYi4nNO5P0od9Lf2Ql7H6NbCA0Hfa8/GKLXH3rDQQ+2ZaGu6wLLNNDttEE56Pf+YNDviT8FHu/1+n0v5Dg29vfS2PuUgGnUkTg/w+94HEeHhzg5OcZFLiuFmw0bDduaiSYh1Om4OP2VwvHPJNi3LVPABdjqNU2SXacJp9m4EyF+dLstWFadOjTooCOHfbRcJyg2uX4bpKBlmlBKRWhalbqx5+rk1g79LjrtFtotV/z/weh8M4jHHRrEak0sg8mZ9I1xbE5Y3/dn7ueHOEinUsJuoZBH/iKHbCaDTDqFXDZDfpr2kxJzXjJxLvEIozhDOalkQiAFefHk+EgOsZ/kTTqQ4GRa48Tk+EAhf4HLQkFwfXVJNh/YPEksxPKoqioqZYVsRaBWytCqamAZ/h7nz2SZH522G5ByF+7So5DC143FO680ZhWVGZ6dneKcwMz5UnB9WUyRySyRB7LhwvIWWmzYLAOWhQ6brFnXR/IhO3kNpxZs0JArlRJqWiVI0jSD1nQUSxpuSlVcXV9DJdL4NnHRmZ/MrHExvVYVBtuui/jVKb5lD/A1fYD9bByaZaNLxLXmIaVJD6OuySc5TgMdt40vx/TT/f4asR9v8PnorcxukpCZshl1qMrM/MV6rQ6VPrWm6jBqpuhRKZVQVkYoFW/E8gjKioIbEjb7XEtmqNIMq9WyFLYtA4pSRD6fk5cwWZM/Uf/uTkOgw2bTluoMicf+PP+/f/EXFjIzBFT+BIgAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;d1ab391f 1ffb 408f 91f6 000759486af3&quot;
+        title=&quot;&quot;
+        src=&quot;/static/163d0f30e681b6ef38ac7e348f993bea/7cb89/d1ab391f-1ffb-408f-91f6-000759486af3.png&quot;
+        srcset=&quot;/static/163d0f30e681b6ef38ac7e348f993bea/8ff5a/d1ab391f-1ffb-408f-91f6-000759486af3.png 240w,
+/static/163d0f30e681b6ef38ac7e348f993bea/e85cb/d1ab391f-1ffb-408f-91f6-000759486af3.png 480w,
+/static/163d0f30e681b6ef38ac7e348f993bea/7cb89/d1ab391f-1ffb-408f-91f6-000759486af3.png 563w&quot;
+        sizes=&quot;(max-width: 563px) 100vw, 563px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;virtualbox-6.1&lt;em&gt;6.1.18-142142&lt;/em&gt;Ubuntu&lt;em&gt;bionic&lt;/em&gt;amd64.deb 파일을 설치합니다.&lt;/p&gt;
+&lt;h3&gt;VirtualBox Extension 설치&lt;/h3&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/3434016fbfda61a7936090a2706b6104/d9199/e0bd769d-5376-4f11-a910-eb3f55ed1523.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 960px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 59.583333333333336%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsSAAALEgHS3X78AAABvklEQVQoz82RW28SQRSA99ea2De1USutWpVSBEPaYl996YuJVrssTR+MLQYEQWkCK8uly6WBWpFLYQXL6s7nsraampLUN0/yzTmTOeebZEa6PXtdzNy4yuzMtHgw78K7cJfFE3wP3QSX/aws+Xi8/IjVYICA3+OceRfm//S67wiv5x4rfrcluWIGc8nv4to7mE7BrV24EhvxJDeC4SdM00R0CzR6Bvs9QbZVoTuqck6I8SJ55ZTwKWkWlV3hCdnZ5v6LJGuRDEUti16uUCpoZLIq7aM+xvArx+a3M6buUU9YwjEKaSf8nG3lGTun2PvX8lPS8QjVao1SaY98Pk+hkKes61TKZfQ9nWKxyGAwIBqNEfC6+GEaYJlIm0qIzfBZQvJL4rEouZzqoGkf7ZxzJJqmoaqqfUGBVusLl6emiG2tkV6aQ4+HkbbCMn8TltdJvI1Sqx3aNKnXmzQaDZu6Xf+i3W5hDEZENlY53L7Jq+AlMm9C5wuVjXVSiYT9NnBwcEyzOaTT6diS9m/6/T6W5fwDg895WvtZp54o/JBMcJE4lTrfLMRk4fsT4Xhg3DgJnGwhLOtiQmfoH+L/F/4EVXlFAO22SDwAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;e0bd769d 5376 4f11 a910 eb3f55ed1523&quot;
+        title=&quot;&quot;
+        src=&quot;/static/3434016fbfda61a7936090a2706b6104/d9199/e0bd769d-5376-4f11-a910-eb3f55ed1523.png&quot;
+        srcset=&quot;/static/3434016fbfda61a7936090a2706b6104/8ff5a/e0bd769d-5376-4f11-a910-eb3f55ed1523.png 240w,
+/static/3434016fbfda61a7936090a2706b6104/e85cb/e0bd769d-5376-4f11-a910-eb3f55ed1523.png 480w,
+/static/3434016fbfda61a7936090a2706b6104/d9199/e0bd769d-5376-4f11-a910-eb3f55ed1523.png 960w&quot;
+        sizes=&quot;(max-width: 960px) 100vw, 960px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;VirtualBox 메인 화면에서 File &gt; Preferences 를 클릭합니다.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/3f64ea18b33e696e3cf9af8689562ae8/d9199/d2e73cf0-3a6b-4e6a-b45d-9148e88716c6.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 960px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 59.583333333333336%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsSAAALEgHS3X78AAACfUlEQVQoz42SWU8aURSA+Xd9aqLRqo2t4IZWmyY+aBVlcamogGIVFRQEl1jcYEBwe6g+9rWaxmpj3bXgQjV1h68zQ1trUpOe5Jtzk7n3yzn3XEVWRhrpaSlkpqfyLDsLVa4SpUopZ3WBitIXakqKCyktUfOypIgidR75uTkU5CllclXPUT5/ijInm6K8HBQZzV4yLT5SLEFSm0ZJr+/ncU0PxUY7gx4XHo+bwZ4m2u0OrI5BGmwmuvpaGPAM4O53MjYyzHQ4zFQwSCAQQKGqaSVPZyVH286rOguNphZMFhNmSwtmk5FeRxcelx2n047L2UunzYrN1kZ311u6O9vwunsZeedFEAIIkrBRX4XRoKGusozxiUl2YxcQv+Ew8o3VlU/s7+5weXHO9WWS26tLbkSuLn4gxcLiIvnKJ/h9owQFHwq9TkutQU91ZQVD434+H8Q4jEbY3dlmY32NrY11YsdRTmNHfD+ROJTX0YM9Dg52GBcmaNaXYS3MxGHWo6jVa6kz6NBWlTM0OsHm4SmXsSi3N9ckeDgSiYT8f/nDDO76NBqKH9HRpE0Ka0WhTlNB77CX4NIei8sbHJ+d3x18APHDl5VlvB4bw65OgsGpO6FBFFo9oxgXtul4v8rXyKksjMcfFibicfmehUCIqdA0AUG4a1nzuhyf3/+rzbi4+Zb/iTVR6PP5xCkLyWfzW1glDkWYHOP87IRoZJ8jkdhR5J9sb27IQ9vc3eLj0hJ+sRBJ9kcoYdDVYHxTj7XVjMXURJ+jh/n5OWZnZpibvc90OERYfMwhiVBYblX4WyjJpKzXVqOt1qARqzW3NMsbpHakCu4jyFmQEPxJmSQV+QnQH+qwfK5kiAAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;d2e73cf0 3a6b 4e6a b45d 9148e88716c6&quot;
+        title=&quot;&quot;
+        src=&quot;/static/3f64ea18b33e696e3cf9af8689562ae8/d9199/d2e73cf0-3a6b-4e6a-b45d-9148e88716c6.png&quot;
+        srcset=&quot;/static/3f64ea18b33e696e3cf9af8689562ae8/8ff5a/d2e73cf0-3a6b-4e6a-b45d-9148e88716c6.png 240w,
+/static/3f64ea18b33e696e3cf9af8689562ae8/e85cb/d2e73cf0-3a6b-4e6a-b45d-9148e88716c6.png 480w,
+/static/3f64ea18b33e696e3cf9af8689562ae8/d9199/d2e73cf0-3a6b-4e6a-b45d-9148e88716c6.png 960w&quot;
+        sizes=&quot;(max-width: 960px) 100vw, 960px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;Extensions 탭 클릭 후 Version 우측에 있는 [+] 모양의 아이콘을 클릭합니다.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/9910d8f140780a729311d2823f9ddd3d/76cea/1a29c74a-6a59-496a-a961-69fd6f3ca3bb.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 799px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 63.33333333333333%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAANCAYAAACpUE5eAAAACXBIWXMAAAsSAAALEgHS3X78AAAB90lEQVQ4y6WSW28SQRiG98cZEwtkLbssy2GXQ4Fl64WxV7XGxPgP/BdeeIgXNlVJY4laipQFikcwEW1TulTbNZbAHuZ1ZiEGbzTFSZ6833zfzJtvDpywuIBQ4ALhQxfBEBcDEMNBqEkJKUXyNa1GKTIyqRhkiQfbI4YDvkpiiEQjPBIxgdB9HpfLxkk2JUGOBMG0/HwTxm4NTaOOamUbm6Vn2H75Am/3WpQm2g0De436H7SbBnnTavgxt1xUsVxQiBLnoWsKup+6GLrA0ANsTHAo3gxkCquduSBjqgPrJ7HGLuG0vIIrepoeLQxtSUbr3h1Y5Qf4tvUQw5112PUSxrUnGL1mbGBU3ZjEtacYvXqEUeUxhpV1HJfu4qx8H5yekbCiJbCkCihkZfSqJaDXhtM1fOxuA07H8LE7ddgfdydzmrffV2F/qNF5HW6H5t/tgCtSEy0tQonx0PJJmN9PgOmR5hmcrqlgJOkdFvMJ9A8P/ILn0svxvHPDsa60XAJK/LJveNQ/nBh63nwd5rIx/3WZqV5Q0P9fw7Qi0P8XQYq+MjOc7ZAQcm44ObKAeDSIqHAJGVX83SErztXhjevXcHNtBWurV3H71irMo75fsG0bjuP8FdedMo1ZjvthnWIW6/Tkn7B1xwMTX3o97O9/pfoZB1QHpolfv1JyC+5R+zoAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;1a29c74a 6a59 496a a961 69fd6f3ca3bb&quot;
+        title=&quot;&quot;
+        src=&quot;/static/9910d8f140780a729311d2823f9ddd3d/76cea/1a29c74a-6a59-496a-a961-69fd6f3ca3bb.png&quot;
+        srcset=&quot;/static/9910d8f140780a729311d2823f9ddd3d/8ff5a/1a29c74a-6a59-496a-a961-69fd6f3ca3bb.png 240w,
+/static/9910d8f140780a729311d2823f9ddd3d/e85cb/1a29c74a-6a59-496a-a961-69fd6f3ca3bb.png 480w,
+/static/9910d8f140780a729311d2823f9ddd3d/76cea/1a29c74a-6a59-496a-a961-69fd6f3ca3bb.png 799w&quot;
+        sizes=&quot;(max-width: 799px) 100vw, 799px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;Oracle&lt;em&gt;VM&lt;/em&gt;VirtualBox&lt;em&gt;Extension&lt;/em&gt;Pack-6.1.18.vbox-extpack 파일을 선택합니다.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/60257cb2c3cfbc695954f7112433a834/d9199/db248878-7bc6-4d5c-9a1c-1b149bccbb86.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 960px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 59.583333333333336%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsSAAALEgHS3X78AAAC1klEQVQoz1WT2U8TURSH+6+pUVAfBEEKUUsBAdcXTEwUOlOkirULrolKxATbQkuxtNOFRbGFtlSwKFg2AVkkuOJuePDh83YUlIcvvzmTyXfPzTmjKS4qoLAgD21hPocOFlOq16Er1aEXWVmh58SxSo4fPSKyipPHq6mqLKNcf5iKMh0V5Tr1ufRwCaW6g1SLWlNkdqO1+cizKeRf8lB0oZX8+hZOWe7hcrTicDpxNVu5efceN1rauNx8jebWq7S3uXE47uNpcxEJhwkqCoFAAI2+zk6Z1IRevo6uRiKvYD85OdvYuWs7e3J3cKBwH4dKCijW7kcryN0t3gv25m6nZF8uZpORdreHLr8ff1Z4UT6LiuEMTTYrTl83bf4+Yg8jdAe76Akr9PWE6A0HVHpCAboF/b0hRhIxbHY7VeVauh64Ufw+NLJkwChLGKVaTGYLwViKzOwSY6PDxB71khx4TDzWv8lg9JHgIWPpYSYyz5HOG7HUn+ZKpZY7FhlNvWxARQgbGs30J1L8+vZeFS7OzbA0P8Pc9ATzMxMiM2ouzE3zdmWRzPg492+bab1wAFN1DtcaDX+ERkGDXEtdw0U8PTHWv34gORhlcvwZC7NTqnxmYlwcMK3Wy69m+fR+lckXY2IoDryOWzhbrhNQgv+EJiGskRu5HYiy/vkdS69eiu5eMjo8pMpHh5OknyR4KhiKR5mdyjCVGRPTdqGEIgQFfjGYzSvLhnNYrVaeptOsf1vjx5ePrH//zMrSPMsLc7xZXeH18iJrorMPb17z8+uauP4k7S6nWBcxYX/XVqFkqOWKzUJfJERadDWSSoiOkqKjJKnEIIPxOLGBAUZHUiQGojwZihOOBNU9VcS6ZGVbhEapjoZ6GZOYmizkdquFzs5OOjo68Hq9dHo7BF61drvdf/B48Pl86kJvEWZlG5lFqjtLk91KKBRSP1bEX5Al8Df/Z0OWzSy/ASlCtN3JxoOdAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;db248878 7bc6 4d5c 9a1c 1b149bccbb86&quot;
+        title=&quot;&quot;
+        src=&quot;/static/60257cb2c3cfbc695954f7112433a834/d9199/db248878-7bc6-4d5c-9a1c-1b149bccbb86.png&quot;
+        srcset=&quot;/static/60257cb2c3cfbc695954f7112433a834/8ff5a/db248878-7bc6-4d5c-9a1c-1b149bccbb86.png 240w,
+/static/60257cb2c3cfbc695954f7112433a834/e85cb/db248878-7bc6-4d5c-9a1c-1b149bccbb86.png 480w,
+/static/60257cb2c3cfbc695954f7112433a834/d9199/db248878-7bc6-4d5c-9a1c-1b149bccbb86.png 960w&quot;
+        sizes=&quot;(max-width: 960px) 100vw, 960px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;Install을 진행합니다.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/c0becde09d8b21db7ab57b3d552db03a/d9199/77a41578-8051-4243-8d64-f84735a28ebd.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 960px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 59.583333333333336%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsSAAALEgHS3X78AAACqklEQVQoz2WTWU8TURSA++98MxoENAgdChRKVVyiEWw7pbRQLF3ABVOkpUz3lllBNMElGH0wkgAJBHFBE/XBBx/8A593RlGMD1/uzNx7vznnnnNdp9taONVygvbWk5ztOI0kuXELpO4uvL0Sfp+XQV8f/kEv5wb76fd66BFzvR63g0fqxN15BndXB/2eLlxtkzXakxonkhYn4w1aowscD2bxxbMohTyFQgHlXpzp7ByZOYXY3Slmc1MUF4sUFvLUq2VWHzxg2bIwTROXFEjRHUojhW/ReSlAh1uiu8eDR9Djkbhw3s/li+cYGrK5wICI1ufrxe8fYEBEOzkmU63VMQwTwxaOy8M4BK6RTiXJlepYhkZRWeTundvk5udp1OssNeo0BepSU7CE2myIqExS6TTe7nZ0tebsc8mhIGE5hBwcIZ7McCdfolIuM51JMnx1iFF5hPGozEQs7BC8foXbkxFKRUWknCMcjZAYvUK6r51sQsY1KgexCdvCqRRzShW1orDy6AnNx6959eIZ60/XeLn+hK2NV+xsbbApRsM00HSTYvYmi7FWov3HmJkI/hKGbakQRuIJAjN5YtNZnj5/wZevX9nf3WZ/b8fh4O0eP75/4+DdG3RDCDWNZq1MQ5mlmLuFaS3/FUZCI9wYn6IrlqMvOov5cI1vnw/49OEtu3t7bO/scvB+n88f37O9uSGKIISqKqpcxVpeZXll1fn2J2U5MEImkxFpGDy0DHRNRVU1J4qjqAJd17FEm+jiuVGtYAqRYej/CkNCOJNOigVlyuLAKyWFWqUsKB3h13shn2NR9Of93DwlUUC7/wxHekQYDgUYG5VFRSPOOJNJO3+109K0f1kSbWPTbDadqP8T2rLD0SZ4Y5hUMiHOZcVZ/B/2rRBYv2+HLTqc+wkCLpqdfKkp/wAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;77a41578 8051 4243 8d64 f84735a28ebd&quot;
+        title=&quot;&quot;
+        src=&quot;/static/c0becde09d8b21db7ab57b3d552db03a/d9199/77a41578-8051-4243-8d64-f84735a28ebd.png&quot;
+        srcset=&quot;/static/c0becde09d8b21db7ab57b3d552db03a/8ff5a/77a41578-8051-4243-8d64-f84735a28ebd.png 240w,
+/static/c0becde09d8b21db7ab57b3d552db03a/e85cb/77a41578-8051-4243-8d64-f84735a28ebd.png 480w,
+/static/c0becde09d8b21db7ab57b3d552db03a/d9199/77a41578-8051-4243-8d64-f84735a28ebd.png 960w&quot;
+        sizes=&quot;(max-width: 960px) 100vw, 960px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/cae51763e5d7b7d0c8daf41ed8c1dfef/d9199/3b6fe844-7ae6-4306-b044-3aa70c887567.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 960px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 59.583333333333336%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsSAAALEgHS3X78AAACj0lEQVQoz42S60uTYRiH99/1KVA0NUw3z6YRFGg63cFDHjanMw+4edo8YPO0vZubJ8oEK6hPHgqzMnWppZlOSdO5XT3vhpkQ1A0XP56X5724b+5HkZQQR3xcDInxsdxKTkKVpkSpUkYyO1NF/u1s8nKzyM/L5k5eDjnZ6WSkpZKZroyQpkpBmXITZWoyOempKBJqHSSanMSYPMTWDBJf0c310jZyqy302ruw2230ttXQaLFitvZS2WKktcNAj70HW3cnQwP9jPt8jHk8uN1uFKrSetK1ZlI1jdwtN1FlNGA0GQUiDVVYLa3Yuix0dAg6rTQ1m2lurqel5RGtTQ04bO0MPHYgSW4kWVilK6Zar6a86B7DI6NsHvyEUJDA3g7rH5bZ+7JJ+OwEguJ7UGToVHAWPYuanZ0lQ3kDl3MQj+REodNqKNPrKCkqpG/YxfL2AQd7u8wtLNH35DXS83meLqwyu/SJmcUoY6+Wcc7N83LFz8DoMAb9fRqyErHW6VCU6TSU67VoigvoGxxh/dshZ4FddgJHrH0/Yfvw9ApbgVM29k/w7x/z9SjI/Asvtso4KnOu0VSjiQrLhFCrLqS934FncUt0s8bhj+hI/6qP797gsLfQ39WMxzN2KdQLodk+SPUzP00zK6zuBCI/nIdChMLhq4QuOGdl+a1Yhpcx7zhuSbocWf2gAKfLRTiiCREWl/+n3guh0+kUW5aiz+ZCWCyWIo0OcXy0z+7ONnuCA7Hpv+FfX2Pzs5/1zQ0WFhdxiUZk2W+hjF5bSvXDCsz1dZiMNXRY25ienmJyYoKpyauM+7z4xGP2ynh9kVGlP4WyTE6dpgRNiRq16LbOUBu5II8jd3AVKZKSjOSKymSp4Beg0eWywvFckQAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;3b6fe844 7ae6 4306 b044 3aa70c887567&quot;
+        title=&quot;&quot;
+        src=&quot;/static/cae51763e5d7b7d0c8daf41ed8c1dfef/d9199/3b6fe844-7ae6-4306-b044-3aa70c887567.png&quot;
+        srcset=&quot;/static/cae51763e5d7b7d0c8daf41ed8c1dfef/8ff5a/3b6fe844-7ae6-4306-b044-3aa70c887567.png 240w,
+/static/cae51763e5d7b7d0c8daf41ed8c1dfef/e85cb/3b6fe844-7ae6-4306-b044-3aa70c887567.png 480w,
+/static/cae51763e5d7b7d0c8daf41ed8c1dfef/d9199/3b6fe844-7ae6-4306-b044-3aa70c887567.png 960w&quot;
+        sizes=&quot;(max-width: 960px) 100vw, 960px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;성공적으로 Extension이 추가되었는지 확인합니다.&lt;/p&gt;
+&lt;h3&gt;VirtualBox VM 생성 (Ubuntu 18.04)&lt;/h3&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/ad65cf8c6a5abab1b8f58b012124f681/d9199/f46f4ef9-4983-42cb-a311-78d62c7c5f28.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 960px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 59.583333333333336%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsSAAALEgHS3X78AAAC8klEQVQoz1WSa1MbZRiG89f8B+1UWwcFEgpIlX7raCSEHAoNhACp1elYaEWCKJ0QNidmOhWEUBJbqBACzQECgZwTSDb0MP3SXr67FUd35p57n3ffvd57n300n16+xMeXLnDlk4s0NTfTrGvjc20brTodX3Re5fpXXXR/2Um38Ovd17jW1U5Hu5bOdp2qDiFty2e0tjTR1daC5vLQLFdGJS4MSzQZRtD12GjWD9BtGsQ5bGVs1MH3dgP9jmEcI05u2vRYh/SMjThwOIa4M2rHO+8hGAjg8/nQaI2jaI1OOiy3sY7PYRgPYrgX5If700zcHWPqpwlck/dw/XyfqckJ3A+nCfrdBL1uAr45HnkfMjvzC5LXh1cB2kw99Bv1OAd6mVxv4NwFxx5Ejs/IxKOk4jskd7eJx7ZI7EQ53EtwfJAie7hH/ihN7ugA+y0Ds79OiQMkNGZTH0ZjL7f6LbifZflu7x3a8HsCsQIbocdE1kKshpaJ/rVObOs525sbbD1/xubGU1U7sSi/PRjD3nqRcYcZjcVkxGQ0YLtpwb95xIMitP4Jj5I1arl9kXCXQj5LqVKlXK1SLFfU+5rc4OzVa+pyHenHG1iufsSdwb7/AEXClZ0scwkZZ+I1kUyFciZF8sU26XiMRPwFSaFCTsCLBRpyjZcNmXA0idftYnriNn5/4BzYS7/VRDpbJl56y8J6htRRkUY1T2Y/yWE6xYHoXUZ4rVpCPq2oXi3liSf3WVxaxucPfvjLCtDcpwDN5PJ5lOvde5DrNU5LOWqVAvVqEfmkpHqtklfXFMknRV7WSiz+/ph5MTr/ApVPHhA9zGbSvHkleiOfclavqpDGaZlKIUv++FAkyqnp6idl1ZWEpfwxS0uLAjj//4RWc586c7MzLmZck2JY3TyNhImE11hdWeYP8dJqaEWtw2tPVH+yukJIPFtYWMDr9X4AKrBzqKFHj+Hbb9B/fQP7oE3d5PF4xOkSkiSpKZTa848r9bxYP4cp/jczruEhuK7KYwAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;f46f4ef9 4983 42cb a311 78d62c7c5f28&quot;
+        title=&quot;&quot;
+        src=&quot;/static/ad65cf8c6a5abab1b8f58b012124f681/d9199/f46f4ef9-4983-42cb-a311-78d62c7c5f28.png&quot;
+        srcset=&quot;/static/ad65cf8c6a5abab1b8f58b012124f681/8ff5a/f46f4ef9-4983-42cb-a311-78d62c7c5f28.png 240w,
+/static/ad65cf8c6a5abab1b8f58b012124f681/e85cb/f46f4ef9-4983-42cb-a311-78d62c7c5f28.png 480w,
+/static/ad65cf8c6a5abab1b8f58b012124f681/d9199/f46f4ef9-4983-42cb-a311-78d62c7c5f28.png 960w&quot;
+        sizes=&quot;(max-width: 960px) 100vw, 960px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;Machine &gt; New 클릭합니다.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/ca293faa6df7d520dea3a5ebe7511186/d9199/c300e13d-11c2-4c7e-bb45-b65489679791.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 960px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 59.583333333333336%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsSAAALEgHS3X78AAAC9klEQVQoz1WSa1NaVxRA+Wv9B8mkTTq2Khi1pjXf+iAi8ogGRVRam+mMr1pJbXVQLwjMZCxGSZU8jFEDCqLI+ykIaB5fktXDzdhpz8yeNfvcM2vvc+5WfH79Gp9eu8KNz67S0NhIo6qFL5UtNKtUfNV+k9vfdND5dTudgrc7b3Gro5W2ViXtrSo52kQom76guamBjpYmFNcH5rgxLHFlUKJBM4Sqy0Sjuo9OXT/WQSMjwxZ+NmvotQxiGbJy16TGOKBmZMiCxTLA6LAZx9IibpcLp9OJQqkdRqm10mb4EeP4AppxN5oxN/cnHzDxywgzv05gmx7D9tskM9MT2Ocf4F6243bYcTkXeOiYZ272dySHE0ddaNJ10atVY+3rZvp5FWsQLBHwJ2rEDnY5PAgQDu5x8GqHUGCXk0iI+PEhiZMI6fgxyXgU8z0Nc3/MiAISCr2uB622m3u9BuzPkvwUeY9y8wOuVxm2fCv4N3xs+NbYe7lFcHebwM4Wu9vP2HnxVI59UejPqRHMzVcZt+hRGHRadFoNprsGll/GmcpC8xN4GC5TTh0RCe8TDQeJnUQpl04pnRZlXpxXeff2Da8vzpHGvsNw8xNG+3v+IxQdrgeSLIQqWEOv8ccK5GOHhPf3iIYCpJIJcpk02UxKZrVS5rxW5cXfKzjnp7BNjrK87LoUdtNr1HGczHOQe4fneYzDeJZqMU3sKEzsOEJUMJtOUCkVOTvNUyrkKObSHAW38XpXcbo8H/9yXajvqQv1pNJp6uv9B6iclSnlUpQLGc6KWSqnOZnlfFowQ0Xey1IrF/H+tcKSGJ1/hfUr94k3TMaOeXNRpVYpUTsrypJqKU8hkySdOKGYTVEVgoy4djyZpCA6zKXjrHq9Qrj0/w6N+h555uZmbczapsWw2nnq38S/ucHj9TUerXp57FvnidhbF3y0tiZyHz7xzePx4HA4PgrrskuppkuN5s4PqL//FnO/ST60uLgoqktIkiR3Uc8lwct8SfBSVuc/lknhLsIhhi8AAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;c300e13d 11c2 4c7e bb45 b65489679791&quot;
+        title=&quot;&quot;
+        src=&quot;/static/ca293faa6df7d520dea3a5ebe7511186/d9199/c300e13d-11c2-4c7e-bb45-b65489679791.png&quot;
+        srcset=&quot;/static/ca293faa6df7d520dea3a5ebe7511186/8ff5a/c300e13d-11c2-4c7e-bb45-b65489679791.png 240w,
+/static/ca293faa6df7d520dea3a5ebe7511186/e85cb/c300e13d-11c2-4c7e-bb45-b65489679791.png 480w,
+/static/ca293faa6df7d520dea3a5ebe7511186/d9199/c300e13d-11c2-4c7e-bb45-b65489679791.png 960w&quot;
+        sizes=&quot;(max-width: 960px) 100vw, 960px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;Name: OpenStack (임의로 작성 가능)
+Type: Linux
+Version: Ubuntu (64-bit)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;으로 설정하고 [Next] 를 클릭합니다.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/7e20c7689e79ae7322bcaa3e5292dd41/d9199/e575cd3d-3296-4de2-866d-2095cff901b0.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 960px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 59.583333333333336%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsSAAALEgHS3X78AAACyElEQVQoz1WSaU9TQRSG+9f8B+4aFGgREBH8otFCKV1kKUtLUWOidYWgEoXe3i7uQFHRuoQEQYG6lNvb3i4sBZf4RR/nlkJ0kjfvzGTy5J1zjuHg/j3s3bOTA/t2UVZeTrmpisPGKipNJo7WHqHxeB0N9bU0NhzjRGM99XXV1FQbqa02FVUjZKw4RGVFGXVVFRj2dw1zwCOxs0eizOLG1NxJubmdBpsLb4+TPk8v/a4mHF0uXN1unB1mznY10ed209vbxXlPDwH/KOFQCFmWMRitHoxWLzWOfpy+ESy+MJbLYS5cHcR3sY+b131E5BGePAzz6H4Q2T9cVNB/F1m6ywP/HYZvDSEFZAI6sNPWTJvVjLe9hRtv1vHOQU8cXinfUOPvic/PkU5+ZTmjkksrwlNkU0rxnBfnnKbS3WFh+PYAIVnCYLe1YrW20NHm4N7rJOfivzG++EPovcbMuxixWIzZ6bfEP86yMDfD3Mw0GTVBVsA0dUlI4fZVD92Vu/G57RgcNis2q4XOsw6C00tc08AYg9CHPPGlD3xKf0HNfELRFlHSi2SVOKmFWRKL86jpNEriM9Klkziqd3De1foPUCSMziYZmS/gnf/Bq6U865kEa8saq/l00dfyGgXhmiiBnrJQursvDTHg6ycoGlMCttDmtPE5meVj5heRtwkWEmm+rWRYyQlYTitqVex1FZYzRZC+X8mmGBufQA6GN7usA+2tOtCOmkqhr99/oLC2Kh6r25BtWL6UtOT63dMnj/GL0dkG6l9uFzVMinr8/L7ORmGFjbV8McmW1kupMqLDqZSKkkySK3V8bOypAPr/T+i0tzJw/YqYqUFuDd4Qw3qP2MspXk4939bUi+dEJ8aJRqOMT0R5NjnJZHSCSCRCIBDYBOqwLail2Yyl6Qzm06fodnUWH42Ojgr5NyVSSJIktOl6Kr/wLZjufwHi6OVd2KBfBgAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;e575cd3d 3296 4de2 866d 2095cff901b0&quot;
+        title=&quot;&quot;
+        src=&quot;/static/7e20c7689e79ae7322bcaa3e5292dd41/d9199/e575cd3d-3296-4de2-866d-2095cff901b0.png&quot;
+        srcset=&quot;/static/7e20c7689e79ae7322bcaa3e5292dd41/8ff5a/e575cd3d-3296-4de2-866d-2095cff901b0.png 240w,
+/static/7e20c7689e79ae7322bcaa3e5292dd41/e85cb/e575cd3d-3296-4de2-866d-2095cff901b0.png 480w,
+/static/7e20c7689e79ae7322bcaa3e5292dd41/d9199/e575cd3d-3296-4de2-866d-2095cff901b0.png 960w&quot;
+        sizes=&quot;(max-width: 960px) 100vw, 960px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;Memory size는 최소 2 GB 이상 설정을 권장합니다.
+Memory size를 설정하고 [Next] 를 클릭합니다.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/e74db316955f8947004324ded66afadc/d9199/98fb1d3d-1a3f-4857-8405-5230201b037a.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 960px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 59.583333333333336%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsSAAALEgHS3X78AAAC4klEQVQoz1WSbVMTVxiG89f8Bzq22qEFEgRlsPRTrZGQV4EEAjG01Q+moxYHlYrsbkKwVSoJb4mApkAgQQiQLFkImEDoy/SLXj1Lom135pp7zs6c6zzPeY7hs3Nn+eTsac5/eoaa2lpqTQ18YWyg3mTi0sULtF5uprXlEq1fNvNVawstzY00NRq52Gg6oUlgrPuc+roamhvqMJzrHuK8T+a0V6bG0oepzU2tuZPLNg9+rwtfnxe/24zT48HT04ur6yqu7mvc6Oult7eb731eFGmE8OgowWAQg9Hqw2j10+TsxxV4giUQxnI7zK27gwRu+ng4+CMTz8KM/1JhVHlMSP5J5DAhwc/SI4YeDCIrQRRd6La30WE14+9s5958Gf8KeNchrv5Obm2ZzHoaLbfFzvYGua11kRn2drLi3yaFfI7SwR49XRaGHg4wGpQxOOw2rNZ2ujqcDM+pfLv+DuPMe8JJjeW5KV7OTjMXmyI2HRFEmY9Pk0r+xurSa1LLCfLisEd3btBTf4ZAnwOD027FbrXgvu4klMhyRwPjHISWdlmMR0guJUgnF6uSBMnFVyeZFuuNtRV21S2U21dwXjjFdx7bf4SiwmhS5Un6iP70n8S2D1DfJFlLJU82ZgTZzTeoou2N9ArFfY1yscChaHlMGmQg0E9IDKYqbKfDZSejFkjt/c3ThSyrmRyppVe8no+RWIizEJ8R0lVKQqRTLOQ/5sREhGAoXJmyLnTYdKGDnXwe/Xv3Hg5LJXaym+KOttHUbXbFIPS1PoRyab/KAW+FcPz5MyRJ+leot9wp7lAVE/zrjzLHR0WODw84elvZfFylXNynoKloWp6sqrK/p50c9OLX8f8L9QpdDhsDd38Qb+o+D+7fE491mJexWWIz0xXEtGdnpohGJohORnkh2pwUORmNMDY2hqIoFaEu+yC1tJmxXLuK+Zuv6fG4xWNVGBkZEUgVRBWyLCNXU69KkuSPMj3/Acuc30sRlfOlAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;98fb1d3d 1a3f 4857 8405 5230201b037a&quot;
+        title=&quot;&quot;
+        src=&quot;/static/e74db316955f8947004324ded66afadc/d9199/98fb1d3d-1a3f-4857-8405-5230201b037a.png&quot;
+        srcset=&quot;/static/e74db316955f8947004324ded66afadc/8ff5a/98fb1d3d-1a3f-4857-8405-5230201b037a.png 240w,
+/static/e74db316955f8947004324ded66afadc/e85cb/98fb1d3d-1a3f-4857-8405-5230201b037a.png 480w,
+/static/e74db316955f8947004324ded66afadc/d9199/98fb1d3d-1a3f-4857-8405-5230201b037a.png 960w&quot;
+        sizes=&quot;(max-width: 960px) 100vw, 960px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;가상 하드 드라이브를 만듭니다.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/4c7830dc2d4688eb393bc4f5920d8e96/d9199/08a08f85-4668-4bd4-b32e-35eb01e3fd4a.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 960px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 59.583333333333336%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsSAAALEgHS3X78AAAClUlEQVQoz22T3U9ScRjH+cu60jZfcpRLbZWZN9103ZYpoFORKfiWpaQtm9ZyiYIgQraFqBkyyXeZiqiAiAKCFzq9+PQ7h3Jkne2z79nZeT57fs9zjqKspJi7xUqZovwcbhfmoizIoajgJsqifO6VFlNWeoeykgzKojwK8nIozM+lQHBLcF+8U/HoAU8qH6Io0X2iRD9KqX4EjeE1akM3tR1GWjvaaNNr6Wxvoburnf63Rgbf99Hb85I+Y5dMr6C/pwOraQir1YbFYkFRUWOgvNrAU203Rt8l2ll4brlg+ucua745Frw/8HnnCG77iYaCHIZ3iewF5PvwboDkcZTJyUmGh01YxsZQaNVV1Fc/Q6+tw7acRGdK8bh+C6drHZ/HxdyMG8+sW6RLxvPdzeKCh62NFdaWfYSC2/S+aubDwDtsY2YUGrUKVfULGhsbmA+csbLixW4ewruWYG9riY3VJfyri+xsbnAiupFIxQ9JJ2KkRZ6exDF/7KapXEmvXoOiVl0jhFXodE24fPsQGWTdv8R6MEXQL8kybPlXOY6GSB4dkIhFZOKHYU7iMRwDdWgqb9CpU2UJtQ1sHqQ4CbjpH/jG9HyAs1RUFEWuBBLZQomUEH4d/0y/sZUxsZgrYZMQJlOnXACJ0wvix0ckY2ESvwWS6LpMQhrBzMwMoxZrZsvZwnQ6xZ8rLWaTEEf6n+S6cHrKhck0/LdQOnIiEefy8oKz83OS8SNREM4UXusuu1tZ6J4SwpF/hZH9HeKxA46iYXng0vykwmhol22x5fBeUMijhEP7bG4HRO6JmiBuucMsoUZVTZ1GJf6MZtpbWzC06Oh70yM+2C84nQ4cExPY7eNyOh0OJkTa7HY5pWdWqxWz2SwLfwH82fcVuJs1GQAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;08a08f85 4668 4bd4 b32e 35eb01e3fd4a&quot;
+        title=&quot;&quot;
+        src=&quot;/static/4c7830dc2d4688eb393bc4f5920d8e96/d9199/08a08f85-4668-4bd4-b32e-35eb01e3fd4a.png&quot;
+        srcset=&quot;/static/4c7830dc2d4688eb393bc4f5920d8e96/8ff5a/08a08f85-4668-4bd4-b32e-35eb01e3fd4a.png 240w,
+/static/4c7830dc2d4688eb393bc4f5920d8e96/e85cb/08a08f85-4668-4bd4-b32e-35eb01e3fd4a.png 480w,
+/static/4c7830dc2d4688eb393bc4f5920d8e96/d9199/08a08f85-4668-4bd4-b32e-35eb01e3fd4a.png 960w&quot;
+        sizes=&quot;(max-width: 960px) 100vw, 960px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;가상 하드 디스크 파일 타입을 VDI(VirtualBox Disk Image)로 설정하고 [Next]를 클릭합니다.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/ab6f42fed633ef6d11f542998f5e6dbb/d9199/a5fc149a-0cf0-4f82-b230-2e89390afd9e.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 960px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 59.583333333333336%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsSAAALEgHS3X78AAACoklEQVQoz3WS60/SURjH+ct6pW1pmWah3bU3vel1W2ZAF0VK8JYXvLRqo3WT4mJesJoIagI/EFCmFioEKASItdX0xacDTrNZZ/vs+e139nzO99k5smp5JWcqywuUlRRRcbyY8tIiykqPcrKshOqqU1TLT3Gu+jTnz56h4mQpJceKOF5STKnghOB8VSU1ly9w9cpFZHLNC+Tat1Rp36DSdaPU9XC7vRddWwvtuia6O1vRd7UJ2ukR310dLTzq62JA/5D+3k6e6NuxGl9itQ5hNpuR1dzScalexzV1D73eHdRTcMO8jcO3xrw0jcc1g+fTFF5RpdlplkNBEtFV4tEV4pEVUusxbDYbg4NGzBYLMrWyjnv119Gq7zAUyKIx5qi99xnbRAjPzEemJidY8EssLviFLEAo6GMh4CUU8BH0uYmEl+jrvM8zw2OGLCZkKqUCRf1NGhsbcIV/Egy4GLW8wiHFkYRw2mEXCZ1IIqHXPYPf68Ln/sTs1CTzcxKJWATz8x6aLpXTr1Uhu628JYR1aDRNTHijEDOwuBTEs5DA5fyAW4ybH9kvuQqy4JyHeb93N/W8X4y+xpjhLsraI3RoFAeE6gaWEzk2w3aeGuyMO0IsirQ+z6wQSCTjEXLpDbKpBJvf1gtkknE2xb/3717zpLcFi7iYfWGTEGZz39kGMj+2SSWTRFeWhCi63/wv8ntOpxOT2bp7yweFW1s59tbWZpqsaMgn+p9sT+iwT2A0Dv4tzI+cyaTZ2dnm569fZNMpMhuxQ4L8AXvsCyftQvjmsDD/ttLJROFtpf8hSwuiq1+IRtZYDoeJfY2InlUmCwkPCFWKeu6oFLRqH9DW0oyuWcNAn57xcRtjo6OMjf1hZHiY4ZER3ok6IuqowGq1YjKZCsLfcnvwn3vuBj4AAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;a5fc149a 0cf0 4f82 b230 2e89390afd9e&quot;
+        title=&quot;&quot;
+        src=&quot;/static/ab6f42fed633ef6d11f542998f5e6dbb/d9199/a5fc149a-0cf0-4f82-b230-2e89390afd9e.png&quot;
+        srcset=&quot;/static/ab6f42fed633ef6d11f542998f5e6dbb/8ff5a/a5fc149a-0cf0-4f82-b230-2e89390afd9e.png 240w,
+/static/ab6f42fed633ef6d11f542998f5e6dbb/e85cb/a5fc149a-0cf0-4f82-b230-2e89390afd9e.png 480w,
+/static/ab6f42fed633ef6d11f542998f5e6dbb/d9199/a5fc149a-0cf0-4f82-b230-2e89390afd9e.png 960w&quot;
+        sizes=&quot;(max-width: 960px) 100vw, 960px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Dynamically allocated (동적 할당)&lt;/li&gt;
+&lt;li&gt;Fixed size (고정 할당)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;두가지 방식으로 가상 하드 디스크를 만들 수 있습니다.&lt;/p&gt;
+&lt;p&gt;동적할당의 경우 실제 사용량 만큼만 파일이 커지기 때문에 호스트 컴퓨터 (VirtualBox가 설치된 컴퓨터) 용량을 낭비없이 효율적으로 사용할 수 있는 장점이 있지만, 고정 크기 방식에 비해 속도가 떨어지는 단점이 있습니다.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/42babd02e18d8d59948e5025d2d0c3b5/d9199/478a745c-ecb2-437d-8edb-68a2b5f12912.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 960px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 59.583333333333336%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsSAAALEgHS3X78AAACpUlEQVQoz22T3S9bYRzH+5ftiiXUvEyGZZuZm93sesmsqgTVTDuMeE/E0iWzKKqmXnZRL414a2nrVGnR6gulVZYQLj57Tpmx7SSffJ9znvw++T3nd46ipKiQJ4X5aXKzMyjIySRfmUGu8iF5udmUFD+mpOgxT4sL05mXm4UyK4Oc7EyUgkeCZ2Kv7OVzXpe/QFGk+0qRfphi/RAaQztVhg6qW7rQNxlo0mvpaGumq72F7s5WjP299Ha13dIj6OtoxmIawGIZw2w2oyirNFCqMvBG20GX4wqtHd6ZL5l17iI5FnAsL7KyaMflWCa2v0skGEgTDe0Q3vOTSsSZnp5mcNCEeXQUhbaqglrVW/TaGsZcSXSmFK9qt5m0SayvzOPdcLPl9eCT3Hg962y4nGkkt5PtzQ0OwgG623R8MfYxNjqMQlOlRq16T319HUuBc9yuZazmARZccYLbLvw+L35RGNiSBGLtk/B5N/CL9UE0TCTkZdjYiq60gB69BkV1VaUQVqDTNWBzhCBsZNPnZskTZXbmB3N2O861NVYdqyKdOER61lbYFN16XA4kScL6uQZN+QM+6dR3hNo6tqIpTgKz9BttTNt9BMV7CobD7EciaUKCaCzK8YHoLLhD/OiIfbE/NfaN/u4mRsVgboUNQphMnXEJJH5echiLcRAKkDqKkopHbjmJXwvloch5chRjfn6eYbPlesp3haenKX5fZ6kESVGcOJSJ3EN+LovktZxzMzZMpsH7QvnIicQxV1eXnF9ckDyOkxAd/E+WFJ0mb+7TwtkZIRz6VxiRjyE6isfC6eP8LTsWhHb97IeC+Pxy7omaXTE8232hRq2iRqMWf8YHmj82YmjU0dvdKT7YKSYnJpic/IN1fByr1cr3m5wQWCwWRkZG0sJfidzz1lg6sG4AAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;478a745c ecb2 437d 8edb 68a2b5f12912&quot;
+        title=&quot;&quot;
+        src=&quot;/static/42babd02e18d8d59948e5025d2d0c3b5/d9199/478a745c-ecb2-437d-8edb-68a2b5f12912.png&quot;
+        srcset=&quot;/static/42babd02e18d8d59948e5025d2d0c3b5/8ff5a/478a745c-ecb2-437d-8edb-68a2b5f12912.png 240w,
+/static/42babd02e18d8d59948e5025d2d0c3b5/e85cb/478a745c-ecb2-437d-8edb-68a2b5f12912.png 480w,
+/static/42babd02e18d8d59948e5025d2d0c3b5/d9199/478a745c-ecb2-437d-8edb-68a2b5f12912.png 960w&quot;
+        sizes=&quot;(max-width: 960px) 100vw, 960px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;가상 하드 디스크의 크기를 입력하고 생성합니다. (최소 8 GB 이상)&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/a32ce298275a843512fe6d486977c2bc/fbf08/5404f9a9-7eb6-4458-b6e7-03175d8b8565.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 960px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 57.50000000000001%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsSAAALEgHS3X78AAACM0lEQVQoz42RO3PTUBCFRRVSMAMz1PybNIQ0JJMiBUUgQEX+AikYKGlok2F4ZEIBLTW1HnZMiKM4dmQpsiRbtp7W0zrce+XrABU7c2avpLufzu4K8XQKLwgRxlOkWY68nCEvShQkF+xMczU/l38pywsmWleQZ30wgeB6ISrUQWowqypEeYWzUYTcllGkOey4iyAbsTsV+Q6qRRWpmc1YtkYBBEvvIZnYyDybIucXS5z1+jC0DqIogjOyECcR49TFFfw4hev5xHm5AF85HoS331t492OAg0aCz23g068Zvp6maLY7MAwDnu/DsR2U80LuxrZtbG2sY2PtAbbWH2JzbRUH7w8hbO6LWNk3sXoU4P6hj5UPLh59MaFeXmE0tNHXdViWBdd1mds8z2s35Gf3lpdwRxBwl+gW0au91xBkpQVFUaDIEpMsSThu/UTnUofj2BiPx8zpZDJBGIZIkoQBDfKj28s3cYOAlogEopd7byAossggsizXosBmE+r5OTqdeoamacInrS+WQmI4HOLF7i6e7Ozg6bPn2H68jY9H34hDApGkudhZQuO4hRO1S5zpyLJs0S4Hcv0bzjjiwGuHkiTimAAvuj2oqoogCJCmKTzPY+3Tlukc6ZK4iqJgmzfpljmQQyVRZDO80HQ2eA6jLdI50tZpjuOYueRQGqbj18A/RcFN4rCrXW+XFv9PDIYEyN1xicRhgyzl5LTNltLv96FpGnSyVZqp6Dsq+o4rzzMYloffedFWhbOoEA8AAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;5404f9a9 7eb6 4458 b6e7 03175d8b8565&quot;
+        title=&quot;&quot;
+        src=&quot;/static/a32ce298275a843512fe6d486977c2bc/d9199/5404f9a9-7eb6-4458-b6e7-03175d8b8565.png&quot;
+        srcset=&quot;/static/a32ce298275a843512fe6d486977c2bc/8ff5a/5404f9a9-7eb6-4458-b6e7-03175d8b8565.png 240w,
+/static/a32ce298275a843512fe6d486977c2bc/e85cb/5404f9a9-7eb6-4458-b6e7-03175d8b8565.png 480w,
+/static/a32ce298275a843512fe6d486977c2bc/d9199/5404f9a9-7eb6-4458-b6e7-03175d8b8565.png 960w,
+/static/a32ce298275a843512fe6d486977c2bc/fbf08/5404f9a9-7eb6-4458-b6e7-03175d8b8565.png 962w&quot;
+        sizes=&quot;(max-width: 960px) 100vw, 960px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;Storage &gt; Contoller: IDE
+IDE Secondary Device 0: [Optical Drive] Empty 를 클릭합니다.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/3b78fb8a42a2319e02439f8232b89011/d9199/02e75f50-b33c-42d8-bead-f55f49fdecff.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 960px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 59.583333333333336%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsSAAALEgHS3X78AAACU0lEQVQoz5WQ60tTcRiA9xcVgZmppcPCqKmNdHOXvEyd01GaRd6yqdMmpm4OmeE9bG4LckaYK1MhrEA/VF/7oJQa3fCCOrfafDo7tooIyhce3vf83vc85z0/iSY7k3TZKaTJCSQfP4o0KZ6kY3EcOXyQxPgYUqQJIiekiSLHE2PFXpS42EPExhwg9aQUgy4HievefUymOrLOyVApM5BnpJKjzcJqa6fL0YW9y05Laws2uw3HLYeI1dZBu7WNDmGm024VZjpxdDuYmPAh0Td3k2WsRJer5EJpPmplGlVXjKwtLbCxvMjm+7d8WXwj5uCnFQIf3hH8uCTUS2wuL7AlnH/7vIKjoxWNVotEVdHA2aIyCnVqjIZctGo5Vy8WsDXjITDlZGfaRXDGTWDGhX9yGP/Dvj3Ge9n2DbH1ZITw5BAPOs1YbrYhsZgbKDPqydfIqdCryVOlU11ZRiR2/0I0onX4R3756jVjY14kjfUmSksEYY6CEr0WleIMNVHh7u4/CYdD4uzc3BwulwuJucGEURDq8lTiHaoUsn0K93acn5/H4/EgaWqsx6AvQKlIo7T4vLBpJrXV5b9+bR9Ct9stCBsEYXEBikwZhflKNNlp1FaV//eGoVDoD6GwYVFhHrLTUlEmT0/h8iUD+42fwuvXarA0m3nsG2d6ysfko3FePH/K12CAnR3/Hv4I2789b7Oxvs762hqrq6ti/9ns7N4dmupqsdxo4vbgAIMD/QwJub+vl56eHobvOBlxOvEIX47g9Y4KePGOjnJXeDlyFtlKrAUive/GMePYcVzfDgAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;02e75f50 b33c 42d8 bead f55f49fdecff&quot;
+        title=&quot;&quot;
+        src=&quot;/static/3b78fb8a42a2319e02439f8232b89011/d9199/02e75f50-b33c-42d8-bead-f55f49fdecff.png&quot;
+        srcset=&quot;/static/3b78fb8a42a2319e02439f8232b89011/8ff5a/02e75f50-b33c-42d8-bead-f55f49fdecff.png 240w,
+/static/3b78fb8a42a2319e02439f8232b89011/e85cb/02e75f50-b33c-42d8-bead-f55f49fdecff.png 480w,
+/static/3b78fb8a42a2319e02439f8232b89011/d9199/02e75f50-b33c-42d8-bead-f55f49fdecff.png 960w&quot;
+        sizes=&quot;(max-width: 960px) 100vw, 960px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;Ubuntu 18.04 Server 이미지를 선택합니다.&lt;/p&gt;
+&lt;h2&gt;VirtualBox 네트워크 설정&lt;/h2&gt;
+&lt;h3&gt;VirtualBox Host Network 설정&lt;/h3&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/a6c09ffd1496927afb7519fc65db6329/fbf08/cd22166f-3fac-4d49-bc11-e01f208d72e2.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 960px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 57.50000000000001%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsSAAALEgHS3X78AAACIUlEQVQoz41Ty27TUBA1q9IFEkis+SLY0LLpjkfpBtFvaMWG/wCxiITEdyR2g2OXxnbSxG87cWIncRLn4cPMbR1FFQtGOppr2XNmzplryfM8BH6AJEmQ5zmKosBqtcJ6zVgLbDZbger5IZbLpaiLogiS6/mCbDabYTweYxDHSOcF2skcq0jBerlClHcxKYbgKMtSYD/K7VZk5pHa7TYs00KWZYiJLAx8lMUcRs+B27NEo3gYIl/MqBLYiuISWb7EKM2w3mx2xEMmNInQMEwx7ng0gu14+KVP0LzpwHNdpNwoiknyXeH2fhr+/uT4CMevXuLk6DXeUP7x/Rukjmmi1dLQ7d5ilAxxbXTx6aeDP7cekkFEDRyEYbizhf3l4GYvDg/wTJLwnPCE8PXigie8gabpsG1HFDGaagsWSY7jCCOa2qVi9nc6nWKxWAhClxo9PXyMR0R0QJAIXy4vaSmOLci4gIuDIECz2YRBk1vWnYe+7wuPq6VwDAYDfD4/x4fTU3w8O8Pbd+9Rq9UgaZoGXddJdguqqkJRZFz9VqGTdJ6Cr0Mld3/LDzfNkdJQUkOW0Wg0BOT7s0rkHfLUMAxMJhNxz9I0FQpYMvvIS6rAd5Eb8HtJURTsQxaEGjp9RxhfkbFEtoWlc+afgEkqUo5/E9KUKi2lS4QRb5c+4uL/CUHIEuv1ukB1vqKltPRrmKaBfr+PXq+3y9WZYdv2LrMS9vovl69cfJP7dtMAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;cd22166f 3fac 4d49 bc11 e01f208d72e2&quot;
+        title=&quot;&quot;
+        src=&quot;/static/a6c09ffd1496927afb7519fc65db6329/d9199/cd22166f-3fac-4d49-bc11-e01f208d72e2.png&quot;
+        srcset=&quot;/static/a6c09ffd1496927afb7519fc65db6329/8ff5a/cd22166f-3fac-4d49-bc11-e01f208d72e2.png 240w,
+/static/a6c09ffd1496927afb7519fc65db6329/e85cb/cd22166f-3fac-4d49-bc11-e01f208d72e2.png 480w,
+/static/a6c09ffd1496927afb7519fc65db6329/d9199/cd22166f-3fac-4d49-bc11-e01f208d72e2.png 960w,
+/static/a6c09ffd1496927afb7519fc65db6329/fbf08/cd22166f-3fac-4d49-bc11-e01f208d72e2.png 962w&quot;
+        sizes=&quot;(max-width: 960px) 100vw, 960px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;File &gt; Host Network Manager를 클릭합니다.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/6e61637d0a990712dec56b3c96de346e/4c42d/209b2272-ea97-4194-9c83-9dcf314047f6.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 896px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 59.583333333333336%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsSAAALEgHS3X78AAABN0lEQVQoz7WT20rDQBCG886Cgq2ltQ0RNFSfxlfwwgtBQUt6MgcTm5jNJukhh92/s6EU0TtbBz52yAzfTthd7fzsRHRap9D7F3Jw2YZODHot9IlBrw3zWseteYWhaWB4YzTff9FtSb3fwZ3RFdrj6B5T50lGvg97NsZ49IokCpCxEGm8AP/6bFB5FofIk6ipqfVHLjn1aM8vD9KxLYS+K5VwYr0hCjyw0EdMMJJHgQt3PqENLXj2FIsPGw712lMLgfcO35lJVaM+qWU8RVWWKMuiWauK8qIgNjsKbDZrcM6RMIY05VivluBJAsZiLPOcyJr6aplDE6LGsUIIAU1NpEJKeRAq6qpSwmov/GvshfX/CI/4y0pY7yYk5QHH8X1Cuipqg2NMKJRQ3W5OL+AQUhbB9xw49hxb98qLxmaJG7AAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;209b2272 ea97 4194 9c83 9dcf314047f6&quot;
+        title=&quot;&quot;
+        src=&quot;/static/6e61637d0a990712dec56b3c96de346e/4c42d/209b2272-ea97-4194-9c83-9dcf314047f6.png&quot;
+        srcset=&quot;/static/6e61637d0a990712dec56b3c96de346e/8ff5a/209b2272-ea97-4194-9c83-9dcf314047f6.png 240w,
+/static/6e61637d0a990712dec56b3c96de346e/e85cb/209b2272-ea97-4194-9c83-9dcf314047f6.png 480w,
+/static/6e61637d0a990712dec56b3c96de346e/4c42d/209b2272-ea97-4194-9c83-9dcf314047f6.png 896w&quot;
+        sizes=&quot;(max-width: 896px) 100vw, 896px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;새로운 Host Network를 구성하기 위해 Create를 클릭합니다.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/18195200b36e6a765279550ca3fb7e4c/4c42d/dcefbcaf-ba8c-4489-b3a5-605c84cd10fc.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 896px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 59.583333333333336%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsSAAALEgHS3X78AAABWklEQVQoz62R7UvCUBTG9z8HBZpp6RAikf6NiCiwrA8RIoSVOp1szpe526YUvsxmpqLuPt3NUeaXKL3wO8+Bc3l47j2cb3vL3vPvgOdDNHIQAB8JIrzv99hF7JBHPBZF/GjB1yzk4fY+GgkHcBwN2pxQu4FmZGlLSYPUcpBLlxiaXYytDkZvHXz02y5O7zAZ9Nis6+rk3cSY6cjqOUqHbM5lhHtakEUI+Sx9yD4hlb5DtUHQ0A2ozzo0pjWNQK5UICkK0yoqagOiXEZRklGuq6irdSqVy1AJoVxKauJWaeNKZkivSDJNlFpIiB5u38RVgSBZ0HCR13Au6Dh9VHGSqeEsR5BWmkgWCa5FAxyojc0dCm42nYJSwGZlGbqE/QuLe8BsNmOGrLjeKyZ/xTnz+Yrhvx/603C62YRzL6Hzoess4zuht5RNJLQdQ8tswzI7azHod/HSMmDoBJ8wr3+LhMyKBAAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;dcefbcaf ba8c 4489 b3a5 605c84cd10fc&quot;
+        title=&quot;&quot;
+        src=&quot;/static/18195200b36e6a765279550ca3fb7e4c/4c42d/dcefbcaf-ba8c-4489-b3a5-605c84cd10fc.png&quot;
+        srcset=&quot;/static/18195200b36e6a765279550ca3fb7e4c/8ff5a/dcefbcaf-ba8c-4489-b3a5-605c84cd10fc.png 240w,
+/static/18195200b36e6a765279550ca3fb7e4c/e85cb/dcefbcaf-ba8c-4489-b3a5-605c84cd10fc.png 480w,
+/static/18195200b36e6a765279550ca3fb7e4c/4c42d/dcefbcaf-ba8c-4489-b3a5-605c84cd10fc.png 896w&quot;
+        sizes=&quot;(max-width: 896px) 100vw, 896px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/7dfc41b52b9bcf677dcf6c122ab8bea4/4c42d/6ffa95c2-f10a-4402-a653-9218c5fc42fc.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 896px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 59.583333333333336%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsSAAALEgHS3X78AAAB50lEQVQoz62R62vTYBTG8z8LCptz07UMxDH8NxREYbbsg6gUZGq3dp1N0qa5NE2WNLfecm2aPJ68bs5vVTDw4znhOe+Tc95wOw8fFE92H6FePyhrz/ZQr+3j8OnuLY9x/LyOk+MjnLz4xW/v4BZW75S1wz28PNovuI50BnXSLk2xBU26AH/9HmHgIVm4iOcuopnDqOqKdOmT5zFNVwES0njhV1qG5HPnnS9ll++hc9kuv7a/43PrI4aKBkWfQB7rUEklVQM/GKAviqRDDGQFPV7AVZ+HMJIxkkdlXxAga1rJfeob+CA6aPBTNPo2mryD02sTp70/MdDoamh2Vby7VPG2o+P1NxmvziW8udDQEgw0r8jv6eCAAv/vKcFlWYaiKLHZbBhFUTDu3u/Jsclz5ERV5/k9zKOeNWVx9o0Bc6JDEnkMhB+wTR2ebWIROIT7b/gOON+xoKsjQoYmD6FrMgJvijyNkCch6V/A+iJk8RJctJzBoYnU0QBjClYVGaYxQZrEtEKCLE2w3gLryVIkcQguXs0RuDYmmgKL1nWdKWzrBuFqxUKTOCLi7VBvFK6qQJrQMqBIIlu3Ctnka/bVNCHSLVB/RXY3oUd36Ds25p6NGU0auBapxeqZtx2/OuM59GPHdGUyfgJ+3m6s8zrGTAAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;6ffa95c2 f10a 4402 a653 9218c5fc42fc&quot;
+        title=&quot;&quot;
+        src=&quot;/static/7dfc41b52b9bcf677dcf6c122ab8bea4/4c42d/6ffa95c2-f10a-4402-a653-9218c5fc42fc.png&quot;
+        srcset=&quot;/static/7dfc41b52b9bcf677dcf6c122ab8bea4/8ff5a/6ffa95c2-f10a-4402-a653-9218c5fc42fc.png 240w,
+/static/7dfc41b52b9bcf677dcf6c122ab8bea4/e85cb/6ffa95c2-f10a-4402-a653-9218c5fc42fc.png 480w,
+/static/7dfc41b52b9bcf677dcf6c122ab8bea4/4c42d/6ffa95c2-f10a-4402-a653-9218c5fc42fc.png 896w&quot;
+        sizes=&quot;(max-width: 896px) 100vw, 896px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;IPv4 Address: 192.168.56.1
+IPv4 Network Mask: 255.255.255.0&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;으로 설정합니다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;[참고]&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/a98054c507fd58f0fb53237515a6e1d8/adc48/5a10306b-7660-4336-aee6-bdf4c5a52c6b.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 960px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 13.750000000000002%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAADCAYAAACTWi8uAAAACXBIWXMAAAsSAAALEgHS3X78AAAAZ0lEQVQI142NOwoAIRQD7QR/KIrfQhHsvP/1svgKq4XdYkhIMWE5Z6SUEGNECAHee8IYAyEEpJQXpdTNNzjnYHtvzDlRSqHROYfeO8YYdHRODl+yK1xrkdBaS+PJWitaa9S11sRf4QO7FEdH/eL0cAAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;5a10306b 7660 4336 aee6 bdf4c5a52c6b&quot;
+        title=&quot;&quot;
+        src=&quot;/static/a98054c507fd58f0fb53237515a6e1d8/d9199/5a10306b-7660-4336-aee6-bdf4c5a52c6b.png&quot;
+        srcset=&quot;/static/a98054c507fd58f0fb53237515a6e1d8/8ff5a/5a10306b-7660-4336-aee6-bdf4c5a52c6b.png 240w,
+/static/a98054c507fd58f0fb53237515a6e1d8/e85cb/5a10306b-7660-4336-aee6-bdf4c5a52c6b.png 480w,
+/static/a98054c507fd58f0fb53237515a6e1d8/d9199/5a10306b-7660-4336-aee6-bdf4c5a52c6b.png 960w,
+/static/a98054c507fd58f0fb53237515a6e1d8/adc48/5a10306b-7660-4336-aee6-bdf4c5a52c6b.png 979w&quot;
+        sizes=&quot;(max-width: 960px) 100vw, 960px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;(VirtualBox가 설치되어 있는 호스트 컴퓨터에서 어댑터 정보를 확인해보면 VirtualBox Host-Only Network 어댑터로 IPv4가 192.168.56.1 로 설정되어 있는 것을 확인할 수 있습니다.)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3&gt;VirtualBox Adapter 설정&lt;/h3&gt;
+&lt;p&gt;OpenStack은 내부 통신을 위한 Internal용 NIC, 외부 통신을 위한 External용 NIC, 최소 2개 이상의 물리 NIC을 필요로 합니다. VirtualBox에서 제공하는 Adapter 설정을 통해 VM에 여러개의 물리 NIC이 연결된 것처럼 구성할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/b2803083f8d1066ffe7168cbc2017fac/bb2fd/622f7b0a-7fac-419a-8150-217125a7eec4.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 960px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 56.25%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAALCAYAAAB/Ca1DAAAACXBIWXMAAAsSAAALEgHS3X78AAABGElEQVQoz31Ty26EMAzk/7+LW1X10N320pWQWCQQz7B5QAJM42iD0nTBkhVw7BnbA8m2bXjl67oiNop59zlxXXIERuc8z5imCVJKKDW5WAwcgydn3RVFgTRNcb/fnTPGIIXYgcniTpMwELKS9X2Pt/cPaK2xLAuapkHbdeCcI89zlGUJY8x5hyFbaATYM45h5FB2DeM4Qgh5PHIIRMXEbOwp7e5mbTBps99rY++X9XxkMiE4qqqyYmgXo5E/L1/OORc7AAl1uX5jGIZ/4vwBfDxG3G4/LlHr2QESAWODVVm5Xfp8paRT/+XI/oUKaDfeCTDLMkvAniBqzz1VOQyGRgR1XaNtW3RPdeOv4XDko0RHGD4f/CHefwHhs16+sk/DYwAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;622f7b0a 7fac 419a 8150 217125a7eec4&quot;
+        title=&quot;&quot;
+        src=&quot;/static/b2803083f8d1066ffe7168cbc2017fac/d9199/622f7b0a-7fac-419a-8150-217125a7eec4.png&quot;
+        srcset=&quot;/static/b2803083f8d1066ffe7168cbc2017fac/8ff5a/622f7b0a-7fac-419a-8150-217125a7eec4.png 240w,
+/static/b2803083f8d1066ffe7168cbc2017fac/e85cb/622f7b0a-7fac-419a-8150-217125a7eec4.png 480w,
+/static/b2803083f8d1066ffe7168cbc2017fac/d9199/622f7b0a-7fac-419a-8150-217125a7eec4.png 960w,
+/static/b2803083f8d1066ffe7168cbc2017fac/bb2fd/622f7b0a-7fac-419a-8150-217125a7eec4.png 1058w&quot;
+        sizes=&quot;(max-width: 960px) 100vw, 960px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;[VirtualBox Adapter]
+Adapter1: 내부 통신용 NIC
+Adapter2: 외부 통신용 NIC (Bridge)
+Adapter3: NAT&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;[Ubuntu]
+enp0s3: (host-only) Internal
+(Adapter1이 Ubuntu VM에서 enp0s3로 설정됨)
+
+enp0s8: (Bridge) External
+(Adapter2가 Ubuntu VM에서 enp0s8로 설정됨)
+
+enp0s9: (NAT)
+(Adapter3가 Ubuntu VM에서 enp0s9로 설정됨)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/381243c48a6dfd9dc93a7602fd61baf4/d9199/2c733e3f-aed1-4eca-9611-624b74176d80.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 960px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 59.583333333333336%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsSAAALEgHS3X78AAACkUlEQVQoz2WSy08TURTG+/+5MFETH1EWxgQ2uhCQ0gq0WInPnTEujRKxlpYCSkjYyQrjRuRd+qalBdp5Tx/T8vPMABFxki83OXPv737fOdd368ZVrl25TF/vPYLBIUYCg4yNDDE89JCAv59nE2Fev5zg1YunvHweIRwKEB4LEBodZkwUCQcZG7hPz52b9N3twfchOs2nD+9ZXvnJzr5C07bodrvkshmqlQqGrqFrKkq9hqYqnkxDp9Wwvb0dp01W9s7OJpmfn8fXG3nD9ZE3vE58ZzVXQakd4TgO5WKOUjFPanuDTGqb8l6ew2qZUiHLYaWEpdUxlCOapkp6Z4uZmRmBzuK73R/i0oNxXkWXyB8Z2IZGt+Ng6wq6HHABxVyGfDbtXaApNXFmYOqquDShIw7TKQ84NzeH7+l4iEhwkLcfo0SW0jxZ2OTdcgbaFu1Wg6IA98XdfqlI/aiKodYFpmBoire2G5ak2CQajRKLxfCFQ6ME/YNMTidZLalsF6uUatIjS+dAouUzu15c18VeISfKUxDHrg4qZRqyb3tjjampKQ/qGxfgY/8Ak4k5MhLZqB3IzRoNUxNXBXLpHVGKzY11ARexTB3bktaYhrealsX65pY3FC+yCwwODfAlMUvNdqjLUFRVxWmadNsNjp0mTXFRKe9JDwvUDqt0pBVO06bdtJBNnvt4PE4ymTwB+h8NsPhtHvfrHh/jtFu0bF0O2nJQeinNb4gz17Ub0a11Tut0W+QyKRKJxMmUz4ALX/8C2xeA7npeZzV3IK5DtyX/ARcXvnL2deTZuLe7kS/CzkOd08ju4P4BBvyPiMc+Uynl5WeKgqcdeX+7FLMXdFrb+P1LBrXG2tY6Kz9+MD0d857NH6m4OApPaTaVAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;2c733e3f aed1 4eca 9611 624b74176d80&quot;
+        title=&quot;&quot;
+        src=&quot;/static/381243c48a6dfd9dc93a7602fd61baf4/d9199/2c733e3f-aed1-4eca-9611-624b74176d80.png&quot;
+        srcset=&quot;/static/381243c48a6dfd9dc93a7602fd61baf4/8ff5a/2c733e3f-aed1-4eca-9611-624b74176d80.png 240w,
+/static/381243c48a6dfd9dc93a7602fd61baf4/e85cb/2c733e3f-aed1-4eca-9611-624b74176d80.png 480w,
+/static/381243c48a6dfd9dc93a7602fd61baf4/d9199/2c733e3f-aed1-4eca-9611-624b74176d80.png 960w&quot;
+        sizes=&quot;(max-width: 960px) 100vw, 960px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;Name: Host Network Manager에서 만들었던 설정 이름으로 선택합니다.
+Promiscuous Mode: Allow All로 설정합니다.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/11086f0222559c2486e853da96fab13d/d9199/78979128-6f4e-4fb5-8538-d0be171abc69.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 960px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 59.583333333333336%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsSAAALEgHS3X78AAACjElEQVQoz22Sy08TURTG+/+5MFETH1EWxgQ2uqFA6QhtscSouCPGpUEi1j7oAwkJO1lB3IhAS0vbmU6nFMq0086zM1M+z1zaiMSbnNzMvef+zvedM75HD+7i3p3bmBh/Bo6bwVxwCqG5GQQDk+Bm/Xi9GMbS20UW795EEQkHEQkFEZ6fRYgiGuEQ8j/H2JOHmHg6Bt9KLIEvK5+ws/sTxdMOLEOH67ooFQtoSHVYpglD19Bpy+gqHRaa2kPfNK5yHRvVagWZTBq5XA6+8egy7s8t433qB/b5JhR6aFNSuZhHtVxEXahCEgU0RB6tZoN9t5oS9G4baucClqZQbgHr6+sEzcD3eDKMWy8WsBTbhnChwlC7GLgOTK0LVZEJUAFfKRH8BI16DTrdm7oKraeQSg1wSWG5xIDZbBa+xYUwotwUPnyOIbpdxqvNPD7uVIC+Drtvol7jSZ2As1OJ1LeoSJtgHajdDtttU0fpOI9YLIZ4PA5fJDwPLjCF1UQa+5KCY/EMkkw90ns4J2tCxVMmMBUi2fUK1PgKi3NqgUl5x0cHWFtbY1DfAgFfBvxYTWVRIcuqfE6Vu8zyqVQDT330LB8dHkCqizA0agtZHu2aruMwX2BDYZY9IDfjx7dUBrLhoC1fQFEUOJaGgW3i0rFgkYpmo86GI7fO4FIrHMuAbemgJKY+mUwinU5fAQPTfmx9z8Fbg8tLOHYffaNHDw16SL2k5ptaj6n2LHpn7vAcgz5zkEqlrqY8Am5u/AXaN4Defj1GZ95APIV8+T/Arc0NjJZLv41X3bN8E3Yd6gwte4P7BxgMTCMZ/4qmJNBlCTUWRYj8CcTqjRieHf3+hTxN96BwiN29PSQScfbb/AG9TzgSVFgy4gAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;78979128 6f4e 4fb5 8538 d0be171abc69&quot;
+        title=&quot;&quot;
+        src=&quot;/static/11086f0222559c2486e853da96fab13d/d9199/78979128-6f4e-4fb5-8538-d0be171abc69.png&quot;
+        srcset=&quot;/static/11086f0222559c2486e853da96fab13d/8ff5a/78979128-6f4e-4fb5-8538-d0be171abc69.png 240w,
+/static/11086f0222559c2486e853da96fab13d/e85cb/78979128-6f4e-4fb5-8538-d0be171abc69.png 480w,
+/static/11086f0222559c2486e853da96fab13d/d9199/78979128-6f4e-4fb5-8538-d0be171abc69.png 960w&quot;
+        sizes=&quot;(max-width: 960px) 100vw, 960px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;
+&lt;p&gt;Promiscuous Mode: Allow All로 설정합니다.&lt;/p&gt;
+&lt;p&gt;
+  &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/debc6bc5a0124aa7310c5c834f8b6fd9/d9199/0a5adc18-916f-477d-9a27-81a97d538595.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+  
+  &lt;span
+    class=&quot;gatsby-resp-image-wrapper&quot;
+    style=&quot;position: relative; display: block;  max-width: 960px; margin-left: auto; margin-right: auto;&quot;
+  &gt;
+    &lt;span
+      class=&quot;gatsby-resp-image-background-image&quot;
+      style=&quot;padding-bottom: 59.583333333333336%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAMCAYAAABiDJ37AAAACXBIWXMAAAsSAAALEgHS3X78AAACiUlEQVQoz22Sy08TQRzH+/95MFETH1EOxgQueqFAaYU+qIoiN2LizSARax/0gQ0JNzlBvIhA6WvbbbtQ2m677b7a3bZffzttIxIn+WZ25zfzme93ZmyPHtzFvTu3MTP9DC7XApacc3AvLcDpmIVr0Y7VNz6sr73G2ls/3q2uwOtxwut2wrO8CDfJ73XBbX+OqScPMfN0CrbNQAhfNj/h4PAnMpctdDUV/X4f2UwaQqUMudNmUhWZpKAttaDIHfR0bTTXNFAocIjFokgkErBN+zdwf2kD65EfOC5WITVFGDSJy6ZIaWRSpyjkMhBrVBPrqPAc6lUBarsJudVAV5GQz5xjZ2eHoDHYHs96cOuFD+8D++AbMjS5jUHfhK6QM1pUFUq4rJTQIpiuyuRKYb3SkcilAgwMFLksA8bjcdhe+Tzwu+bw4XMA/v08VpIpfDzgMOyp6OoqLgjYalwxgNymuJ0WVPq2/q3e7GnIkcNAIIBgMAib17MMl2MOW6EojgUJ6fIVBLEDk3ZvU6SLMo8aRayUihBIlRKPMl9AqWhFvyTHMtJ0LNvb2wxq8xHwpcOOrUgcHEWWxRrb3SCg1KyzyFWhjBJBagTQVQXaWCy6puHsPM0uhUW2gK4FO75FYhA1E02xAUkaAc0u3SJF0mQJhXyWRbPgfUNnNYNknaFVC4fDiEajI6Bj3o697wlYbTAcwjR66GkdBrNkLWw3G2jWr9BpiWyMAa9dSiQSGd3yBJjc/Qs0rgEnLodml2kwdsc20kcOi/n/APeSu5i0Pj0ba3dr8cTlTVlQcxyZ53L/Ap2OeYSDX+l8eCpmUWLKoFzMoVy4ofHY2e9fSJ2d4OT8FIdHRwiFguzZ/AHoyDlSEcbvbgAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+    &gt;
+      &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        style=&quot;width: 100%; height: 100%; margin: 0; vertical-align: middle; position: absolute; top: 0; left: 0; box-shadow: inset 0px 0px 0px 400px white;&quot;
+        alt=&quot;0a5adc18 916f 477d 9a27 81a97d538595&quot;
+        title=&quot;&quot;
+        src=&quot;/static/debc6bc5a0124aa7310c5c834f8b6fd9/d9199/0a5adc18-916f-477d-9a27-81a97d538595.png&quot;
+        srcset=&quot;/static/debc6bc5a0124aa7310c5c834f8b6fd9/8ff5a/0a5adc18-916f-477d-9a27-81a97d538595.png 240w,
+/static/debc6bc5a0124aa7310c5c834f8b6fd9/e85cb/0a5adc18-916f-477d-9a27-81a97d538595.png 480w,
+/static/debc6bc5a0124aa7310c5c834f8b6fd9/d9199/0a5adc18-916f-477d-9a27-81a97d538595.png 960w&quot;
+        sizes=&quot;(max-width: 960px) 100vw, 960px&quot;
+      /&gt;
+    &lt;/span&gt;
+  &lt;/span&gt;
+  
+  &lt;/a&gt;
+    &lt;/p&gt;</content:encoded></item><item><title><![CDATA[OpenStack Horizon은 어떻게 사용자를 인증할까?]]></title><description><![CDATA[OpenStack Horizon은 어떻게 사용자를 인증, 인가하고 Keystone과 연동할까요? 이에 대한 과정을 시퀀스 다이어그램과 코드를 통해 알아봅시다.]]></description><link>https://roh-j.github.io/posts/how-does-openstack-horizon-authenticate-users/</link><guid isPermaLink="false">https://roh-j.github.io/posts/how-does-openstack-horizon-authenticate-users/</guid><pubDate>Thu, 18 Feb 2021 00:00:00 GMT</pubDate><content:encoded>&lt;p&gt;Horizon은 클라우드 관리자와 사용자들이 다양한 OpenStack 자원과 서비스를 관리할 수 있는 웹 인터페이스입니다. OpenStack Horizon은 어떻게 사용자를 인증, 인가하고 Keystone과 연동할까요? 이에 대한 과정을 시퀀스 다이어그램과 코드를 통해 알아봅시다.&lt;/p&gt;
 &lt;h1&gt;OpenStack Horizon 인증 과정 요약&lt;/h1&gt;
 &lt;table&gt;
 &lt;thead&gt;
